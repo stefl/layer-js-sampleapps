@@ -13,9 +13,7 @@ module.exports = Backbone.View.extend({
     var parts = '';
 
     if (!this.model.isDestroyed) {
-      this.model.parts.forEach(function(part) {
-        parts += '<div class="bubble text">' + part.body + '</div>';
-      });
+      parts = this.model.parts.map(this.getMessageParts).join('');
 
       this.$el.append('<div class="avatar">' + initial + '</div>' +
                       '<div class="message-content">' +
@@ -38,5 +36,19 @@ module.exports = Backbone.View.extend({
       default:
         return 'unread';
     }
+  },
+  getMessageParts: function(part) {
+    var bubbleType = '';
+
+    switch (part.mimeType) {
+      case 'text/plain':
+        bubbleType = 'text';
+        break;
+      case 'text/quote':
+        bubbleType = 'quote';
+        break;
+    }
+
+    return '<div class="bubble ' + bubbleType + '">' + part.body + '</div>';
   }
 });
