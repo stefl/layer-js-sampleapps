@@ -7,13 +7,13 @@
     </div>
   </div>
 
-  <div class='user-list' ng-controller='userListCtrl' ng-show="chatCtrlState.showUserList">
-    <div class="participant" ng-repeat="user in users">
-      <div class="avatar"></div>
+  <div class='user-list' ng-show="chatCtrlState.showUserList">
+    <div class="participant" ng-repeat="user in appCtrlState.users">
+      <div class="avatar-image"><img src={{user.avatarUrl}} class="avatar" /></div>
       <div class="info">
         <div class="main">
-          <label for="{{'user-list-' + user}}" class="title">{{user}}</label>
-          <input id="{{'user-list-' + user}}" value={{user}} type='checkbox' name='userList' ng-click='updateTitle()' ng-model='ignored'/>
+          <label for="{{'user-list-' + user.id}}" class="title">{{user.displayName}}</label>
+          <input id="{{'user-list-' + user.id}}" value={{user.id}} type='checkbox' name='userList' ng-click='updateTitle()' ng-model='ignored'/>
         </div>
       </div>
     </div>

@@ -8,10 +8,11 @@ import NewConversation from './containers/NewConversation';
 import ActiveConversation from './containers/ActiveConversation';
 import DefaultPanel from './components/DefaultPanel';
 import configureStore from './store/configureStore';
-import { fetchUsersSuccess } from './actions/messenger';
+import { ownerSet } from './actions/messenger';
 import { IndexRoute, Route } from 'react-router';
 import { ReduxRouter } from 'redux-router';
 
+let client;
 /**
  * Wait for identity dialog message to complete
  */
@@ -21,9 +22,11 @@ window.addEventListener('message', function(evt) {
   /**
    * Initialize Layer Client with `appId`
    */
-  const client = new Client({
-    appId: window.layerSample.appId
-  });
+  if (!client) {
+    client = new Client({
+      appId: window.layerSample.appId
+    });
+  }
 
   /**
    * Client authentication challenge.
@@ -34,6 +37,15 @@ window.addEventListener('message', function(evt) {
   client.once('challenge', e => {
     window.layerSample.challenge(e.nonce, e.callback);
   });
+
+  client.on('ready', () => {
+    store.dispatch(ownerSet(client.user.toObject()));
+  });
+
+  /**
+   * Start authentication
+   */
+  client.connect(window.layerSample.userId);
 
   /**
    * Start authentication
@@ -46,9 +58,20 @@ window.addEventListener('message', function(evt) {
   const store = configureStore(client);
 
   /**
-   * Bootstrap users
+   * Run a quick query to verify that this app is correctly setup
+   * for running this sample app.  This Query is not used for
+   * anything else.  Note that we do query for Identities properly
+   * in Messenger.js using `QueryBuilder.identities()`
    */
-  store.dispatch(fetchUsersSuccess(window.layerSample.users));
+  var identityQuery = client.createQuery({
+    model: layer.Query.Identity,
+    dataType: layer.Query.ObjectDataType,
+    change: function(evt) {
+      if (evt.type === 'data') {
+        window.layerSample.validateSetup(client);
+      }
+    }
+  });
 
   // Render the UI wrapped in a LayerProvider
   render(

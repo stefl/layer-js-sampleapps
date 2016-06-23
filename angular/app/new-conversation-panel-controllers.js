@@ -18,13 +18,10 @@ controllers.controller('newConversationCtrl', function($scope) {
   function getSelectedUsers() {
     var result = Array.prototype.slice.call(document.querySelectorAll('.user-list :checked'))
       .map(function(node) {
-        return node.value;
+        return $scope.appCtrlState.client.getIdentity(node.value);
       });
 
-    // Make sure that the user of this session is part of the list
-    if (result.indexOf($scope.appCtrlState.client.userId) === -1) {
-      result.push($scope.appCtrlState.client.userId);
-    }
+    result.push($scope.appCtrlState.client.user);
     return result;
   }
 
@@ -43,9 +40,10 @@ controllers.controller('newConversationCtrl', function($scope) {
    * to point to that Conversation.
    */
   $scope.send = function() {
+    // Get the userIds of all selected users
     var participants = getSelectedUsers();
-    if (participants.length) {
 
+    if (participants.length) {
       var metadata = {};
       if ($scope.newTitle) metadata.title = $scope.newTitle;
 
@@ -87,23 +85,9 @@ controllers.controller('newConversationCtrl', function($scope) {
    */
   $scope.updateTitle = function() {
     if (!$scope.userChangedTitle) {
-      $scope.newTitle = getSelectedUsers().join(', ').replace(/(.*),(.*?)/, '$1 and$2')
+      $scope.newTitle = getSelectedUsers().map(function(user) {
+        return user.displayName;
+      }).join(', ').replace(/(.*),(.*?)/, '$1 and$2')
     }
   };
-});
-
-/**
- * The User List Controller manages a list of users with checkboxes next to them
- * for setting up participants for a new conversation.
- */
-controllers.controller('userListCtrl', function($scope) {
-  $scope.users = [];
-
-  // Once the users list has been loaded, grab and store
-  // this data to drive our user list.
-  $scope.$watch('appCtrlState.isReady', function(newValue) {
-    if (newValue) {
-      $scope.users = window.layerSample.users;
-    }
-  });
 });

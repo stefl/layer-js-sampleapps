@@ -116,7 +116,7 @@ controllers.controller('typingIndicatorCtrl', function($scope) {
   // update our state and rerender.
   // See http://static.layer.com/sdk/docs/#!/api/layer.Client-event-typing-indicator-change
   $scope.appCtrlState.client.on('typing-indicator-change', function(evt) {
-    if (evt.conversationId === $scope.chatCtrlState.currentConversation.id) {
+    if ($scope.chatCtrlState.currentConversation && evt.conversationId === $scope.chatCtrlState.currentConversation.id) {
       $scope.typing = evt.typing;
       $scope.paused = evt.paused;
       $scope.$digest();
@@ -125,9 +125,13 @@ controllers.controller('typingIndicatorCtrl', function($scope) {
 
   // Render a typing indicator message
   $scope.getText = function() {
-    var users = $scope.typing;
-    if (users && users.length > 0) {
-      return users.length === 1 ? users[0] + ' is typing' : users.join(', ') + ' are typing';
+    var users = $scope.typing || [];
+    var userNames = users.map(function(identity) {
+      return identity.displayName;
+    });
+
+    if (userNames.length > 0) {
+      return userNames.join(', ') + (userNames.length === 1 ? ' is ' : ' are ') + 'typing';
     } else {
       return '';
     }

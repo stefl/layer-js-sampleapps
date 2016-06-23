@@ -62,6 +62,13 @@ module.exports = function(client) {
   });
 
   /**
+   * Create Identity List Query
+   */
+  var identityQuery = client.createQuery({
+    model: layer.Query.Identity
+  });
+
+  /**
    * Any time a query data changes we should rerender.  Data changes when:
    *
    * * The Query data has loaded from the server
@@ -97,7 +104,6 @@ module.exports = function(client) {
         announcementsView.render();
         break;
       case 'property':
-        // we can update view on isRead property change here
         break;
     }
 
@@ -106,6 +112,13 @@ module.exports = function(client) {
       return !item.isRead;
     });
     Backbone.$('.announcements-button').toggleClass('unread-announcements', unread.length > 0);
+  });
+  identityQuery.on('change', function(evt) {
+    if (evt.type === 'data') {
+      window.layerSample.validateSetup(client);
+    }
+    participantView.users = identityQuery.data;
+    renderAll(); // new Identities can affect rendering of many panels
   });
 
   /**
@@ -193,11 +206,7 @@ module.exports = function(client) {
     sendView.conversation = conversation;
 
     typingPublisher.setConversation(conversation);
-
-    conversationsView.render();
-    messagesView.render();
-    titlebarView.render();
-    sendView.render();
+    renderAll();
     participantView.hide();
   });
 
@@ -214,6 +223,14 @@ module.exports = function(client) {
   router.on('route:announcements', function() {
     announcementsView.show();
   });
+
+  function renderAll() {
+    conversationsView.render();
+    messagesView.render();
+    titlebarView.render();
+    sendView.render();
+    participantView.render();
+  }
 
   if (window.location.hash) Backbone.history.loadUrl(Backbone.history.fragment);
 };

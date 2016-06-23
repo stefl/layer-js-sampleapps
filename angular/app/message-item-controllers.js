@@ -16,19 +16,6 @@ controllers.controller('messageListItemCtrl', function ($scope) {
     $scope.closed = !$scope.closed;
   };
 
-
-  /**
-   * Get initials from sender
-   *
-   * @method
-   * @param  {Object} message - Message object or instance
-   * @return {string} - User's display name
-   */
-  $scope.getSenderInitials = function(message) {
-    var name = message.sender.userId || '';
-    return name.substr(0, 2).toUpperCase();
-  };
-
   /**
    * Get the message's read/delivered status.  For this
    * simple example we ignore delivered (see `message.deliveryStatus`).

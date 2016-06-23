@@ -61,7 +61,15 @@ export default class ConversationHeader extends Component {
   renderTitle() {
     const { activeConversation, disableEdit } = this.props;
     var title = '← Create a new conversation or select a conversation from the list.';
-    if (activeConversation) title = activeConversation.metadata.title || activeConversation.participants.join(', ');
+    if (activeConversation) {
+      if (activeConversation.metadata.title) {
+        title = activeConversation.metadata.title;
+      } else {
+        title = activeConversation.participants
+        .map(user => user.displayName)
+        .join(', ');
+      }
+    }
 
     return (
       <div className='conversation-header panel-header'>

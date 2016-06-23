@@ -18,6 +18,16 @@ export const ROUTER_DID_CHANGE = '@@reduxReactRouter/routerDidChange';
 export const DELETE_CONVERSATION = 'DELETE_CONVERSATION';
 export const SHOW_ANNOUNCEMENTS = 'SHOW_ANNOUNCEMENTS';
 export const HIDE_ANNOUNCEMENTS = 'HIDE_ANNOUNCEMENTS';
+export const OWNER_SET = 'OWNER_SET';
+
+export function ownerSet(owner) {
+  return {
+    type: OWNER_SET,
+    payload: {
+      owner
+    }
+  };
+}
 
 export function clientReady() {
   return {
@@ -70,20 +80,20 @@ export function newConversation() {
   return pushState(null, '/new');
 }
 
-export function addParticipant(userId) {
+export function addParticipant(user) {
   return {
     type: ADD_PARTICIPANT,
     payload: {
-      userId
+      user
     }
   };
 }
 
-export function removeParticipant(userId) {
+export function removeParticipant(user) {
   return {
     type: REMOVE_PARTICIPANT,
     payload: {
-      userId
+      user
     }
   };
 }

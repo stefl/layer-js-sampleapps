@@ -23,7 +23,8 @@ function mapDispatchToProps(dispatch) {
 function getQueries() {
   return {
     conversations: QueryBuilder.conversations(),
-    announcements: QueryBuilder.announcements()
+    announcements: QueryBuilder.announcements(),
+    users: QueryBuilder.identities(),
   };
 }
 
@@ -43,8 +44,8 @@ export default class Messenger extends Component {
   }
 
   renderMessenger() {
-    const { app, activeConversationId, actions, conversations, announcements, announcementState } = this.props;
-    const { users } = app;
+    const { app, activeConversationId, actions, announcementState,
+            users, conversations, announcements } = this.props;
     const { newConversation, deleteConversation, showAnnouncements, markMessageRead } = actions;
 
     // Render the left-panel which contains the Conversation List
@@ -54,12 +55,12 @@ export default class Messenger extends Component {
       <div className='messenger'>
         <div className='left-panel'>
           <ConversationListHeader
+            owner={app.owner}
             unreadAnnouncements={Boolean(announcements.filter(item => item.isUnread).length)}
             onShowAnnouncements={showAnnouncements}
             onNewConversation={newConversation}/>
           <ConversationList
             conversations={conversations}
-            users={users}
             activeConversationId={activeConversationId}
             onDeleteConversation={deleteConversation}/>
         </div>

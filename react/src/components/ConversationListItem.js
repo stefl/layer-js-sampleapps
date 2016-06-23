@@ -17,8 +17,8 @@ export default class ConversationListItem extends Component {
   }
 
   render() {
-    const { conversation, users, active, deleteConversation } = this.props;
-    const participantUsers = conversation.participants;
+    const { conversation, active, deleteConversation } = this.props;
+    const participantUsers = conversation.participants.filter(user => !user.sessionOwner);
     const conversationUrl = `/conversations/${toUUID(conversation.id)}`;
 
     const styles = cx({
@@ -27,7 +27,9 @@ export default class ConversationListItem extends Component {
       'selected-conversation': active
     });
 
-    const title = conversation.metadata.title || participantUsers.join(', ');
+    const title = conversation.metadata.title || participantUsers.map(function(user) {
+      return user.displayName;
+    }).join(', ');
     return (
       <Link to={conversationUrl} className={styles}>
         <Avatar users={participantUsers}/>

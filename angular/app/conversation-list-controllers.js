@@ -13,39 +13,26 @@ var controllers = angular.module('conversationListControllers', []);
  * Rendering is done by iterating over $scope.query.data
  */
 controllers.controller('conversationListCtrl', function ($scope, $rootScope) {
-  // Once we are authenticated and the User list is loaded, create the query
-  $scope.$watch('appCtrlState.isReady', function(newValue) {
-    if (newValue) {
 
-      // Create the Conversation List query
-      $scope.query = $scope.appCtrlState.client.createQuery({
-        model: layer.Query.Conversation,
-        dataType: 'object',
-        paginationWindow: 500
-      });
 
-      /**
-       * Any time the query data changes, rerender.  Data changes when:
-       *
-       * * The Conversation data has loaded from the server
-       * * A new Conversation is created and added to the results
-       * * A Conversation is deleted and removed from the results
-       * * Any Conversation in the results has a change of metadata or participants
-       */
-      $scope.query.on('change', function() {
-        $rootScope.$digest();
-      });
-    }
-  }, this);
+  // Create the Conversation List query
+  $scope.query = $scope.appCtrlState.client.createQuery({
+    model: layer.Query.Conversation,
+    dataType: 'object',
+    paginationWindow: 500
+  });
 
   /**
-   * Utility for rendering all users in a Conversation.
+   * Any time the query data changes, rerender.  Data changes when:
+   *
+   * * The Conversation data has loaded from the server
+   * * A new Conversation is created and added to the results
+   * * A Conversation is deleted and removed from the results
+   * * Any Conversation in the results has a change of metadata or participants
    */
-  $scope.getConversationAvatars = function(conversationObject) {
-    return conversationObject.participants.map(function(participant) {
-      return participant.substr(0, 2).toUpperCase();
-    });
-  };
+  $scope.query.on('change', function() {
+    $rootScope.$digest();
+  });
 
   /**
    * This deletes a Conversation from the server.

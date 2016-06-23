@@ -6,18 +6,25 @@ module.exports = Backbone.View.extend({
   tagName: 'div',
   className: 'message-item',
   render: function() {
-    var name = this.model.sender.userId || 'Unknown';
-    var initial = name.substr(0, 2).toUpperCase();
 
     var timestamp = window.layerSample.dateFormat(this.model.sentAt);
     var parts = '';
 
     if (!this.model.isDestroyed) {
-      parts = this.model.parts.map(this.getMessageParts).join('');
+      this.model.parts.forEach(function(part) {
+        switch(part.mimeType) {
+          case 'text/plain':
+            parts += '<div class="bubble text">' + part.body + '</div>';
+            break;
+          case 'text/quote':
+            parts += '<div class="bubble quote">' + part.body + '</div>';
+            break;
+        }
+      });
 
-      this.$el.append('<div class="avatar">' + initial + '</div>' +
+      this.$el.append('<div class="avatar-image"><img src="' + this.model.sender.avatarUrl + '" /></div>' +
                       '<div class="message-content">' +
-                        '<span class="name">' + name + '</span>' +
+                        '<span class="name">' + this.model.sender.displayName + '</span>' +
                         '<div class="message-parts">' + parts + '</div>' +
                       '</div>' +
                       '<div class="timestamp">' + timestamp +
