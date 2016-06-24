@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import { Client } from 'layer-sdk';
 import { LayerProvider } from 'layer-react';
 import Messenger from './containers/Messenger';
-import NewConversation from './containers/NewConversation';
 import ActiveConversation from './containers/ActiveConversation';
 import DefaultPanel from './components/DefaultPanel';
 import configureStore from './store/configureStore';
@@ -80,7 +79,6 @@ window.addEventListener('message', function(evt) {
         <ReduxRouter>
           <Route path='/' component={Messenger}>
             <IndexRoute component={DefaultPanel}/>
-            <Route path='/new' component={NewConversation}/>
             <Route path='/conversations/:conversationId' component={ActiveConversation}/>
           </Route>
         </ReduxRouter>

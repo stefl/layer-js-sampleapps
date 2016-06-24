@@ -20,6 +20,7 @@ module.exports = Backbone.View.extend({
     this.$el.empty();
      this.users.forEach(function(user) {
       this.$el.append(
+        '<div class="avatar-image"><img src="' + user.avatarUrl + '" /></div>' +
         '<label for="' + user.userId + '" class="participant">' +
           '<div class="avatar-image">' +
             '<img src="' + user.avatarUrl + '" />' +

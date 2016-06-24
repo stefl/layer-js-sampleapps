@@ -20,14 +20,6 @@ module.exports = Backbone.View.extend({
   },
   inputAction: function(e) {
     var text = e.target.value.trim();
-    if (!this.conversation) {
-      if (e.keyCode === 13 && text) {
-        this.trigger('conversation:create', text);
-        e.target.value = '';
-      }
-      return;
-    }
-
     this.trigger('typing:started');
 
     if (e.keyCode !== 13 || !text) return true;

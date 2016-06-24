@@ -5,7 +5,7 @@ var app = angular.module('ChatApp', [
   'sampleAppControllers',
   'conversationPanelControllers',
   'conversationListControllers',
-  'newConversationPanelControllers',
+  'participantDialogControllers',
   'messageListControllers',
   'messageItemControllers',
   'infinite-scroll',

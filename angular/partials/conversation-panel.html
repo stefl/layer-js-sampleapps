@@ -18,11 +18,10 @@
     </div>
   </div>
 
-  <div class="conversation-panel-message-list" ng-include="'partials/messages/message-list.html'"
-      ng-hide="chatCtrlState.showUserList" >
+  <div class="conversation-panel-message-list" ng-include="'partials/messages/message-list.html'">
   </div>
 
-  <div class='typing-indicator-panel' ng-hide="chatCtrlState.showUserList" ng-controller='typingIndicatorCtrl'>
+  <div class='typing-indicator-panel' ng-controller='typingIndicatorCtrl'>
     {{getText()}}
   </div>
 

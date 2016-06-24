@@ -19,9 +19,16 @@ module.exports = Backbone.View.extend({
       var participants = conversation.participants;
       var client = conversation.getClient();
 
-      var title = conversation.metadata.title || participants.map(function(user) {
-        return user.displayName;
-      });
+      var title = conversation.metadata.title;
+      if (!title) {
+        title = participants
+        .filter(function(user) {
+          return !user.sessionOwner;
+        })
+        .map(function(user) {
+          return user.displayName;
+        });
+      }
 
       var selectedClass = '';
       if (this.conversation && conversation.id === this.conversation.id) selectedClass = 'selected-conversation';
@@ -31,7 +38,7 @@ module.exports = Backbone.View.extend({
       });
       var cluster = avatars.length > 1 ? 'cluster' : '';
 
-      this.$el.append('<a class="participant ' + unread + selectedClass + '" href="#conversations/' + uuid + '">' +
+      this.$el.append('<a class="conversation-item ' + unread + selectedClass + '" href="#conversations/' + uuid + '">' +
                         '<div class="avatar-image ' + cluster + '">' + avatars.join('') + '</div>' +
                         '<div class="info">' +
                           '<div class="main">' +

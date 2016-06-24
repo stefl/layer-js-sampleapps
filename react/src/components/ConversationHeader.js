@@ -85,10 +85,10 @@ export default class ConversationHeader extends Component {
   }
 
   render() {
-    const { editingNewConversation, editingTitle } = this.props;
+    const { editingTitle } = this.props;
 
-    // Show the title input on the NewConversation page or after clicking the pencil icon.
-    if (editingNewConversation || editingTitle) {
+    // Show the title input after clicking the pencil icon.
+    if (editingTitle) {
       return this.renderEditing();
     }
     // Otherwise show the title.

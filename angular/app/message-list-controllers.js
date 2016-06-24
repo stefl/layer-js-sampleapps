@@ -96,13 +96,7 @@ controllers.controller('messageListCtrl', function ($scope) {
 });
 
 controllers.controller('announcementDialogCtrl', function($scope, $rootScope) {
-    var dialog = document.querySelectorAll('.announcements-dialog')[0];
-    dialog.addEventListener('click', function(evt) {
-        if (evt.target === dialog || evt.target.parentNode === dialog) {
-            $scope.chatCtrlState.showAnnouncements = false;
-            $rootScope.$digest();
-        }
-    });
+
 });
 
 controllers.controller('announcementListCtrl', function($scope, $rootScope) {

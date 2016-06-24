@@ -20,14 +20,10 @@ export default class UserListItem extends Component {
   render() {
     const { user, selected } = this.props;
     return (
-      <div className='participant' onClick={this.handleClick}>
+      <div className='participant-item' onClick={this.handleClick}>
         <Avatar user={user}/>
-        <div className='info'>
-          <div className='main'>
-            <label className='title'>{user.displayName}</label>
-            <input type='checkbox' checked={selected}/>
-          </div>
-        </div>
+        <label className='title'>{user.displayName}</label>
+        <input type='checkbox' checked={selected}/>
       </div>
     );
   }

@@ -28,7 +28,11 @@ module.exports = Backbone.View.extend({
     else if (this.conversation) {
       var title = this.conversation.metadata.title;
       if (!title) {
-        title = this.conversation.participants.map(function(user) {
+        title = this.conversation.participants
+        .filter(function(user) {
+          return !user.sessionOwner;
+        })
+        .map(function(user) {
           return user.displayName;
         }, this)
         .join(', ').replace(/(.*),(.*?)/, '$1 and$2');

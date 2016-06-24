@@ -40,6 +40,24 @@ export default class MessageListItem extends Component {
     }
   }
 
+  renderPart(messagePart) {
+    switch(messagePart.mimeType) {
+      case 'text/plain':
+        return (
+          <TextMessagePart
+            key={messagePart.id}
+            messagePart={messagePart}/>);
+      case 'text/quote':
+        return (
+          <QuoteMessagePart
+            key={messagePart.id}
+            messagePart={messagePart}/>);
+      default:
+        return (<div key={messagePart.id} />);
+    }
+  }
+
+
   render() {
     const { message } = this.props;
     const user = message.sender;
@@ -52,22 +70,7 @@ export default class MessageListItem extends Component {
           <span className='name'>{user.displayName}</span>
 
           <div className='message-parts'>
-            {message.parts.map((messagePart) => {
-              switch(messagePart.mimeType) {
-                case 'text/plain':
-                  return (
-                    <TextMessagePart
-                      key={messagePart.id}
-                      messagePart={messagePart}/>);
-                case 'text/quote':
-                  return (
-                    <QuoteMessagePart
-                      key={messagePart.id}
-                      messagePart={messagePart}/>);
-                default:
-                  return (<div key={messagePart.id} />);
-              }
-            })}
+            {message.parts.map(messagePart => this.renderPart(messagePart))}
           </div>
         </div>
         <span className='timestamp'>

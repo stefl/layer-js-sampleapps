@@ -5,7 +5,8 @@
   "scripts": {
     "prepublish": "npm run build",
     "start": "http-server -a localhost",
-    "build": "browserify app/index.js -o bundle.js"
+    "build": "browserify app/index.js -o bundle.js",
+    "watch": "watchify app/index.js -o bundle.js -v"
   },
   "dependencies": {
     "http-server": "~0.8.0"

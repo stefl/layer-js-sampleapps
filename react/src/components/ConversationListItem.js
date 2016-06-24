@@ -22,7 +22,7 @@ export default class ConversationListItem extends Component {
     const conversationUrl = `/conversations/${toUUID(conversation.id)}`;
 
     const styles = cx({
-      participant: true,
+      'conversation-item': true,
       'unread-messages': conversation.unreadCount > 0,
       'selected-conversation': active
     });
@@ -30,6 +30,8 @@ export default class ConversationListItem extends Component {
     const title = conversation.metadata.title || participantUsers.map(function(user) {
       return user.displayName;
     }).join(', ');
+
+    // Render the UI
     return (
       <Link to={conversationUrl} className={styles}>
         <Avatar users={participantUsers}/>

@@ -9,6 +9,9 @@ import MessageList from '../components/messages/MessageList';
 import MessageComposer from '../components/MessageComposer';
 import TypingIndicatorContainer from './TypingIndicatorContainer';
 
+/**
+ * Copy data from reducers into our properties
+ */
 function mapStateToProps({ activeConversation, router }) {
   return {
     ...activeConversation,
@@ -16,10 +19,17 @@ function mapStateToProps({ activeConversation, router }) {
   };
 }
 
+/**
+ * Copy all actions into this.props.actions
+ */
 function mapDispatchToProps(dispatch) {
   return { actions: bindActionCreators(MessengerActions, dispatch) };
 }
 
+/**
+ * Setup the Messages Queriy; will set the query results to be
+ * this.props.messages.
+ */
 function getQueries({ activeConversationId, messagePagination }) {
   return {
     messages: QueryBuilder
@@ -43,16 +53,6 @@ export default class ActiveConversation extends Component {
       messages,
       actions
     } = this.props;
-    const {
-      editConversationTitle,
-      changeConversationTitle,
-      saveConversationTitle,
-      cancelEditConversationTitle,
-      loadMoreMessages,
-      changeComposerMessage,
-      submitComposerMessage,
-      markMessageRead
-    } = actions;
 
     const activeConversation = conversations.find((conversation) => {
       return conversation.id === activeConversationId;
@@ -66,23 +66,23 @@ export default class ActiveConversation extends Component {
           title={title}
           activeConversation={activeConversation}
           editingTitle={editingTitle}
-          onEditConversationTitle={editConversationTitle}
-          onChangeConversationTitle={changeConversationTitle}
-          onSaveConversationTitle={saveConversationTitle}
-          onCancelEditConversationTitle={cancelEditConversationTitle}/>
+          onEditConversationTitle={actions.editConversationTitle}
+          onChangeConversationTitle={actions.changeConversationTitle}
+          onSaveConversationTitle={actions.saveConversationTitle}
+          onCancelEditConversationTitle={actions.cancelEditConversationTitle}/>
 
         <MessageList
           messages={messages}
-          onMarkMessageRead={markMessageRead}
-          onLoadMoreMessages={loadMoreMessages}/>
+          onMarkMessageRead={actions.markMessageRead}
+          onLoadMoreMessages={actions.loadMoreMessages}/>
 
         <TypingIndicatorContainer
           conversationId={activeConversationId}/>
 
         <MessageComposer
           value={composerMessage}
-          onChange={changeComposerMessage}
-          onSubmit={submitComposerMessage}/>
+          onChange={actions.changeComposerMessage}
+          onSubmit={actions.submitComposerMessage}/>
       </div>
     );
   }

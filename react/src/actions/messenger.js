@@ -5,7 +5,9 @@ export const CLIENT_READY = 'CLIENT_READY';
 export const CHANGE_COMPOSER_MESSAGE = 'CHANGE_COMPOSER_MESSAGE';
 export const SUBMIT_COMPOSER_MESSAGE = 'SUBMIT_COMPOSER_MESSAGE';
 export const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS';
-export const NEW_CONVERSATION = 'NEW_CONVERSATION';
+export const SHOW_PARTICIPANTS = 'SHOW_PARTICIPANTS';
+export const HIDE_PARTICIPANTS = 'HIDE_PARTICIPANTS';
+export const CREATE_CONVERSATION = 'CREATE_CONVERSATION';
 export const ADD_PARTICIPANT = 'ADD_PARTICIPANT';
 export const REMOVE_PARTICIPANT = 'REMOVE_PARTICIPANT';
 export const EDIT_CONVERSATION_TITLE = 'EDIT_CONVERSATION_TITLE';
@@ -76,8 +78,22 @@ export function goHome() {
   return pushState(null, '/');
 }
 
-export function newConversation() {
-  return pushState(null, '/new');
+export function showParticipants() {
+  return {
+    type: SHOW_PARTICIPANTS
+  };
+}
+
+export function hideParticipants() {
+  return {
+    type: HIDE_PARTICIPANTS
+  };
+}
+
+export function createConversation() {
+  return {
+    type: CREATE_CONVERSATION
+  };
 }
 
 export function addParticipant(user) {

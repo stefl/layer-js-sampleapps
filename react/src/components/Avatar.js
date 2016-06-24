@@ -9,7 +9,7 @@ export default class Avatar extends Component {
   }
 
   renderUserItem = (user) => {
-    return <span key={user.id}><img src={user.avatarUrl} /></span>;
+    return <span key={'avatar-' + user.id}><img src={user.avatarUrl} /></span>;
   }
 
   render() {
@@ -20,6 +20,6 @@ export default class Avatar extends Component {
       cluster: usersToRender && usersToRender.length > 1
     });
 
-    return <div className={styles}>{usersToRender.map(this.renderUserItem)}</div>;
+    return <div className={styles}>{usersToRender.filter(item => item.id).map(this.renderUserItem)}</div>;
   }
 }

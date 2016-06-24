@@ -95,7 +95,7 @@ sampleControllers.controller('appCtrl', function ($scope) {
  */
 sampleControllers.controller('chatCtrl', function ($scope, $route, $location) {
   $scope.chatCtrlState = {
-    showUserList: false,
+    showParticipants: false,
     showAnnouncements: false,
     unreadAnnouncements: 0,
     currentConversation: null
@@ -130,18 +130,7 @@ sampleControllers.controller('chatCtrl', function ($scope, $route, $location) {
           $scope.loadConversation('layer://' + matches[0]);
         });
       }
-      $scope.chatCtrlState.showUserList = false;
-    }
-
-    // If the URL matches a new Conversation, show the Create Conversation UI
-    // and insure all checkboxes are clear.
-    else if ($location.$$url.match(/\/conversations\/new$/)) {
-      $scope.chatCtrlState.showUserList = true;
-      $scope.chatCtrlState.currentConversation = null;
-      Array.prototype.slice.call(document.querySelectorAll('.user-list :checked'))
-        .forEach(function(node) {
-          node.checked = false;
-        });
+      $scope.chatCtrlState.showParticipants = false;
     }
   }
 
@@ -149,6 +138,14 @@ sampleControllers.controller('chatCtrl', function ($scope, $route, $location) {
 
   // Handle the initial url state we loaded the app with.
   handleLocation();
+
+  $scope.showNewConversation = function() {
+    $scope.chatCtrlState.showParticipants = true;
+    Array.prototype.slice.call(document.querySelectorAll('.participant-list :checked'))
+      .forEach(function(node) {
+        node.checked = false;
+      });
+  }
 
 
   /**
@@ -160,7 +157,11 @@ sampleControllers.controller('chatCtrl', function ($scope, $route, $location) {
       if (conversationObject.metadata.title) return conversationObject.metadata.title;
 
       // A join of all participants names is the backup title.
-      return conversationObject.participants.map(function(identity) {
+      return conversationObject.participants
+      .filter(function(identity) {
+        return !identity.sessionOwner;
+      })
+      .map(function(identity) {
         return identity.displayName;
       }).join(', ');
     }

@@ -25,7 +25,7 @@ export default class MessageList extends Component {
     const messages = this.props.messages;
 
     return (
-      <div className='announcement-list-container'>
+      <div className='announcement-list-container dialog-container'>
         <div className="panel-header">
             <span className="title">Announcements</span>
         </div>

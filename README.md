@@ -12,7 +12,7 @@ Each sample app implementation is framework specific and not necessarily a demon
 
 ## The Web SDK
 
-The Web SDK in all samples is loaded via script tag directly from our [CDN](https://cdn.layer.com/sdk/1.0/layer-websdk.js). For more information on how the Web SDK works, see [Web SDK Docs](https://developer.layer.com/docs/websdk).
+The Web SDK in all samples is loaded via script tag directly from our [CDN](https://cdn.layer.com/sdk/1.1/layer-websdk.js). For more information on how the Web SDK works, see [Web SDK Docs](https://developer.layer.com/docs/websdk).
 
 ## Authentication
 
@@ -21,6 +21,10 @@ For demonstration purposes Layer provides a sample authentication endpoint which
 Layer Staging Application IDs can be found in your [Developer Dashboard](https://developer.layer.com/projects/keys).
 
 > In real application this should be replaced with your own authentication mechanism and manage your own user identities.
+
+## Mime Types
+
+These samples come with two mime types: `text/plain` which is any normal message you send, and `text/quote` which is any Message you send that starts with `> `.
 
 ## Sample Users
 

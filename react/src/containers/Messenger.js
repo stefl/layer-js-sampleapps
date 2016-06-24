@@ -7,19 +7,33 @@ import * as MessengerActions from '../actions/messenger';
 import ConversationList from '../components/ConversationList';
 import ConversationListHeader from '../components/ConversationListHeader';
 import AnnouncementsList from '../components/announcements/MessageList';
+import UserListDialog from '../components/UserListDialog';
 
-function mapStateToProps({ app, announcementState, router }) {
+/**
+ * Copy data from reducers into our properties
+ */
+function mapStateToProps({ app, announcementState, participantState, router }) {
   return {
-    app,
-    announcementState,
+    owner: app.owner,
+    ready: app.ready,
+    showAnnouncements: announcementState.showAnnouncements,
+    participantState,
     activeConversationId: `layer:///conversations/${router.params.conversationId}`,
   };
 }
 
+/**
+ * Copy all actions into this.props.actions
+ */
 function mapDispatchToProps(dispatch) {
   return { actions: bindActionCreators(MessengerActions, dispatch) };
 }
 
+/**
+ * Setup all of the Queries; will set the query results to be
+ * this.props.conversations, this.props.announcements, this.props.users.
+ * Message query is setup elsewhere.
+ */
 function getQueries() {
   return {
     conversations: QueryBuilder.conversations(),
@@ -28,61 +42,133 @@ function getQueries() {
   };
 }
 
-/**
- * connectQuery adds a conversations property containing
- * all conversations returned by the Conversation Query.
- */
+
 @connect(mapStateToProps, mapDispatchToProps)
 @connectQuery({}, getQueries)
 export default class Messenger extends Component {
+
+  /**
+   * Hide the Announcements Dialog
+   */
   hideAnnouncements = (event) => {
     const { actions } = this.props;
     const { hideAnnouncements } = actions;
-    if (event.target.parentNode.className === 'announcements-dialog') {
+    if (event.target.parentNode.classList.contains('announcements-dialog')) {
       hideAnnouncements();
     }
   }
 
-  renderMessenger() {
-    const { app, activeConversationId, actions, announcementState,
-            users, conversations, announcements } = this.props;
-    const { newConversation, deleteConversation, showAnnouncements, markMessageRead } = actions;
+  /**
+   * Hide the Participants Dialog
+   */
+  hideParticipants = (event) => {
+    const { actions } = this.props;
+    const { hideParticipants } = actions;
+    if (event.target.parentNode.classList.contains('participants-dialog')) {
+      hideParticipants();
+    }
+  }
 
-    // Render the left-panel which contains the Conversation List
-    // and the right-panel which consists of the child components
-    // (currently IndexRoute, Route with NewConversation and Route with ActiveConversation)
+  /**
+   * Render the left panel with the Conversation List and List Header
+   */
+  renderLeftPanel() {
+    const {
+      owner,
+      conversations,
+      announcements,
+      activeConversationId,
+      actions
+    } = this.props;
+
     return (
-      <div className='messenger'>
-        <div className='left-panel'>
-          <ConversationListHeader
-            owner={app.owner}
-            unreadAnnouncements={Boolean(announcements.filter(item => item.isUnread).length)}
-            onShowAnnouncements={showAnnouncements}
-            onNewConversation={newConversation}/>
-          <ConversationList
-            conversations={conversations}
-            activeConversationId={activeConversationId}
-            onDeleteConversation={deleteConversation}/>
-        </div>
-        {this.props.children && React.cloneElement(this.props.children, {
-          conversations,
-          users
-        })}
-        {announcementState.showAnnouncements ?
-          <div
-            onClick={this.hideAnnouncements}
-            className="announcements-dialog">
-              <div>
-                <AnnouncementsList
-                  messages={announcements}
-                  onMarkMessageRead={markMessageRead}/>
-              </div>
-        </div>
-        : <span />}
+      <div className='left-panel'>
+        <ConversationListHeader
+          owner={owner}
+          unreadAnnouncements={Boolean(announcements.filter(item => item.isUnread).length)}
+          onShowAnnouncements={actions.showAnnouncements}
+          onShowParticipants={actions.showParticipants}/>
+        <ConversationList
+          conversations={conversations}
+          activeConversationId={activeConversationId}
+          onDeleteConversation={actions.deleteConversation}/>
       </div>
     );
   }
 
+  /**
+   * Render the Announcements dialog.
+   */
+  renderAnnouncementDialog() {
+    const { announcements, actions } = this.props;
+    return (
+      <div
+        onClick={this.hideAnnouncements}
+        className="announcements-dialog dialog">
+        <div>
+          <AnnouncementsList
+            messages={announcements}
+            onMarkMessageRead={actions.markMessageRead}/>
+        </div>
+      </div>
+    );
+  }
+
+  /**
+   * Render the Participants dialog.
+   */
+  renderParticipantDialog() {
+    const { owner, users, participantState, actions } = this.props;
+    const selectedParticipants = participantState.participants;
+
+    return (
+      <div
+        onClick={this.hideParticipants}
+        className="participants-dialog dialog">
+        <div>
+          <UserListDialog
+            users={users.filter(user => user.id !== owner.id)}
+            selectedUsers={selectedParticipants}
+            onUserSelected={actions.addParticipant}
+            onUserUnselected={actions.removeParticipant}
+            onSave={actions.createConversation}/>
+        </div>
+      </div>
+    );
+  }
+
+  /**
+   * Render the Main UI
+   */
+  renderMessenger() {
+    const {
+      showAnnouncements,
+      participantState,
+      users,
+      conversations,
+      announcements
+    } = this.props;
+    const { showParticipants } = participantState;
+
+    // Render the left-panel which contains the Conversation List
+    // and the right-panel which consists of the child components
+    // (currently IndexRoute and Route with ActiveConversation)
+    return (
+      <div className='messenger'>
+        {this.renderLeftPanel()}
+        {this.props.children && React.cloneElement(this.props.children, {
+          conversations,
+          users
+        })}
+        {showAnnouncements ? this.renderAnnouncementDialog() : <span />}
+        {showParticipants ? this.renderParticipantDialog() : <span />}
+      </div>
+    );
+  }
+
+  /**
+   * Render every users favorite screen
+   */
   renderEmptyScreen() {
     return (
       <div className='messenger'></div>
@@ -93,7 +179,7 @@ export default class Messenger extends Component {
    * If we are ready, render the Messenger, else render a blank screen
    */
   render() {
-    if (this.props.app.ready) {
+    if (this.props.ready) {
       return this.renderMessenger();
     } else {
       return this.renderEmptyScreen();

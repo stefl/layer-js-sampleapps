@@ -8,7 +8,7 @@ var MessagesView = require('./views/messages');
 var TitlebarView = require('./views/titlebar');
 var SendView = require('./views/send');
 var TypingIndicatorView = require('./views/typingindicator');
-var ParticipanstView = require('./views/participants');
+var ParticipantsView = require('./views/participants-dialog');
 var AnnouncementsView = require('./views/announcements');
 
 /**
@@ -28,15 +28,16 @@ var router = new Router();
  */
 module.exports = function(client) {
   var activeConversationId = null;
-  var newConversation = {};
 
   var conversationsView = new ConversationsView();
   var messagesView = new MessagesView();
   var titlebarView = new TitlebarView();
   var sendView = new SendView();
   var typingindicatorView = new TypingIndicatorView();
-  var participantView = new ParticipanstView();
+  var participantsView = new ParticipantsView();
   var announcementsView = new AnnouncementsView();
+
+  participantsView.user = client.user;
 
   /**
    * Create Conversation List Query
@@ -117,8 +118,8 @@ module.exports = function(client) {
     if (evt.type === 'data') {
       window.layerSample.validateSetup(client);
     }
-    participantView.users = identityQuery.data;
-    renderAll(); // new Identities can affect rendering of many panels
+    participantsView.users = identityQuery.data;
+    participantsView.render();
   });
 
   /**
@@ -163,29 +164,17 @@ module.exports = function(client) {
       paginationWindow: messagesQuery.paginationWindow + 30
     });
   });
-  titlebarView.on('conversation:title', function(title) {
-    newConversation.metadata = { title: title };
-  });
-  participantView.on('conversation:participants', function(participants) {
-    newConversation.participants = participants;
-    newConversation.distinct = participants.length === 1;
-  });
-  sendView.on('conversation:create', function(text) {
+
+  participantsView.on('conversation:create', function(participants) {
     // See http://static.layer.com/sdk/docs/#!/api/layer.Conversation
-    var conversation = client.createConversation(newConversation);
-    conversation.createMessage(text).send();
+    var conversation = client.createConversation({
+      participants: participants,
+      distinct: participants.length === 1
+    });
 
     // Update our location.
     var uuid = conversation.id.substr(conversation.id.lastIndexOf('/') + 1);
     router.navigate('conversations/' + uuid, {trigger: true});
-    conversation.on('conversations:sent', function() {
-      // A Conversation ID may change after its sent
-      // if the server returns a matching Distinct Conversation.
-      var uuid = conversation.id.substr(conversation.id.lastIndexOf('/') + 1);
-      if (location.hash !== '#conversations/' + uuid) {
-        router.navigate('conversations/' + uuid, {trigger: true});
-      }
-    });
   });
 
   /**
@@ -207,17 +196,10 @@ module.exports = function(client) {
 
     typingPublisher.setConversation(conversation);
     renderAll();
-    participantView.hide();
   });
 
   router.on('route:conversation:new', function() {
-    newConversation = {};
-
-    conversationsView.newConversation();
-    messagesView.newConversation();
-    titlebarView.newConversation();
-    sendView.newConversation();
-    participantView.newConversation();
+    participantsView.show();
   });
 
   router.on('route:announcements', function() {
@@ -229,7 +211,7 @@ module.exports = function(client) {
     messagesView.render();
     titlebarView.render();
     sendView.render();
-    participantView.render();
+    participantsView.render();
   }
 
   if (window.location.hash) Backbone.history.loadUrl(Backbone.history.fragment);

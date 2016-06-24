@@ -1,5 +1,6 @@
 import { TypingIndicators } from 'layer-sdk';
 import {
+  CREATE_CONVERSATION,
   SUBMIT_COMPOSER_MESSAGE,
   SAVE_CONVERSATION_TITLE,
   MARK_MESSAGE_READ,
@@ -19,40 +20,33 @@ function handleAction(layerClient, typingPublisher, state, action, next) {
   const { type, payload } = action;
 
   switch(type) {
+    case CREATE_CONVERSATION: {
+      const { participants } = state.participantState;
+      const distinct = participants.length === 1;
+      const conversation = layerClient.createConversation({
+        distinct,
+        participants
+      });
+      const originalId = conversation.id;
+      next(selectConversation(originalId));
+
+      // If its a Distinct Conversation, and a matching Conversation is found on the server,
+      // then we may need to select a new ID.
+      conversation.once('conversations:sent', () => {
+        if (originalId !== conversation.id) {
+          next(selectConversation(conversation.id));
+        }
+      });
+      return;
+    }
     case SUBMIT_COMPOSER_MESSAGE: {
-      let conversation;
-      if (state.router.location.pathname === '/new') {
-        const { participants, title } = state.newConversation;
-        const { users } = state.app;
-        const distinct = title.length === 0;
-        const metadataTitle = title || '';
+      typingPublisher.setState(FINISHED);
 
-        conversation = layerClient.createConversation({
-          distinct,
-          participants,
-          metadata: {
-            title:  metadataTitle
-          }
-        });
-
-        const originalId = conversation.id;
-        next(selectConversation(originalId));
-        conversation.on('conversations:sent', () => {
-          if (originalId !== conversation.id) {
-            next(selectConversation(conversation.id));
-          }
-        });
-
-        conversation.createMessage(state.newConversation.composerMessage).send();
-      } else {
-        typingPublisher.setState(FINISHED);
-
-        conversation = layerClient
+      const conversation = layerClient
           .getConversation(`layer:///conversations/${state.router.params.conversationId}`, true);
-      }
-
-      const text = state.newConversation.composerMessage;
+      const text = state.activeConversation.composerMessage;
       let message;
+
       if (text.indexOf('> ') === 0) {
         message = conversation.createMessage({
           parts: [{

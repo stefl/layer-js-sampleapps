@@ -9,8 +9,6 @@ module.exports = Backbone.View.extend({
   el: '.announcements-dialog',
   render: function() {
     if (!this.announcements) return;
-    console.log('render: ' + this.announcements.length + ' Announcements');
-
     this.$list = this.$el.find('.announcement-list');
     this.$list.empty();
 

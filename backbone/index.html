@@ -18,7 +18,7 @@
   <script src="common/layerSample.js"></script>
 
   <!-- Layer Web SDK -->
-  <script src="//cdn.layer.com/sdk/1.1/layer-websdk.min.js"></script>
+  <script src="//static.layer.com/sdk/layer-dev-2.0.js"></script>
 
   <!-- Backbone build -->
   <script src="bundle.js"></script>
@@ -47,13 +47,26 @@
           <input class="message-textarea" placeholder="Enter a message..."></input>
         </div>
       </div>
-      <div class="announcements-dialog hidden">
+      <div class="announcements-dialog dialog hidden">
         <div>
-          <div class="announcement-list-container">
+          <div class="announcement-list-container dialog-container">
             <div class="panel-header">
               <span class="title">Announcements</span>
             </div>
             <div class="announcement-list"></div>
+          </div>
+        </div>
+      </div>
+      <div class="participants-dialog dialog hidden">
+        <div>
+          <div class="participant-list-container dialog-container">
+            <div class="panel-header">
+              <span class="title">Select Participants</span>
+            </div>
+            <div class="participant-list"></div>
+            <div class="button-panel">
+              <button class="button-ok">OK</button>
+            </div>
           </div>
         </div>
       </div>
