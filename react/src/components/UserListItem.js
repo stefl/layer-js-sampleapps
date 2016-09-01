@@ -8,26 +8,21 @@ import Avatar from './Avatar';
  */
 export default class UserListItem extends Component {
   handleClick = () => {
-    const userId = this.props.user;
+    const user = this.props.user;
 
     if (this.props.selected) {
-      this.props.onUserUnselected(userId);
+      this.props.onUserUnselected(user);
     } else {
-      this.props.onUserSelected(userId);
+      this.props.onUserSelected(user);
     }
   }
 
   render() {
     const { user, selected } = this.props;
     return (
-      <div className='participant' onClick={this.handleClick}>
-        <Avatar user={user}/>
-        <div className='info'>
-          <div className='main'>
-            <label className='title'>{user}</label>
-            <input type='checkbox' checked={selected}/>
-          </div>
-        </div>
+      <div className='participant-item' onClick={this.handleClick}>
+        <label className='title'>{user}</label>
+        <input type='checkbox' checked={selected}/>
       </div>
     );
   }

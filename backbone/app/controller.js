@@ -8,7 +8,8 @@ var MessagesView = require('./views/messages');
 var TitlebarView = require('./views/titlebar');
 var SendView = require('./views/send');
 var TypingIndicatorView = require('./views/typingindicator');
-var ParticipanstView = require('./views/participants');
+var ParticipantsView = require('./views/participants-dialog');
+var AnnouncementsView = require('./views/announcements');
 
 /**
  * Client router
@@ -16,7 +17,8 @@ var ParticipanstView = require('./views/participants');
 var Router = Backbone.Router.extend({
   routes: {
     'conversations/new': 'conversation:new',
-    'conversations/:id': 'conversation:selected'
+    'conversations/:id': 'conversation:selected',
+    'announcements': 'announcements'
   }
 });
 var router = new Router();
@@ -26,29 +28,40 @@ var router = new Router();
  */
 module.exports = function(client) {
   var activeConversationId = null;
-  var newConversation = {};
 
   var conversationsView = new ConversationsView();
   var messagesView = new MessagesView();
   var titlebarView = new TitlebarView();
   var sendView = new SendView();
   var typingindicatorView = new TypingIndicatorView();
-  var participantView = new ParticipanstView();
+  var participantsView = new ParticipantsView();
+  var announcementsView = new AnnouncementsView();
+
+  participantsView.user = client.user;
 
   /**
-   * Create the Conversation List Query
+   * Create Conversation List Query
    */
   var conversationQuery = client.createQuery({
     model: layer.Query.Conversation
   });
 
   /**
-   * Create the Message List Query
+   * Create Message List Query
    */
   var messagesQuery = client.createQuery({
     model: layer.Query.Message,
     paginationWindow: 30
   });
+
+  /**
+   * Create Announcements Query
+   */
+  var announcementsQuery = client.createQuery({
+    model: layer.Query.Announcement,
+    paginationWindow: 30
+  });
+
 
   /**
    * Any time a query data changes we should rerender.  Data changes when:
@@ -78,6 +91,23 @@ module.exports = function(client) {
         break;
     }
   });
+  announcementsQuery.on('change', function(e) {
+    switch (e.type) {
+      case 'data':
+      case 'insert':
+        announcementsView.announcements = announcementsQuery.data;
+        announcementsView.render();
+        break;
+      case 'property':
+        break;
+    }
+
+    // Mark unread announcements
+    var unread = announcementsQuery.data.filter(function(item) {
+      return !item.isRead;
+    });
+    Backbone.$('.announcements-button').toggleClass('unread-announcements', unread.length > 0);
+  });
 
   /**
    * Any typing indicator events received from the client
@@ -88,8 +118,8 @@ module.exports = function(client) {
   client.on('typing-indicator-change', function(e) {
     if (e.conversationId === activeConversationId) {
       typingindicatorView.typing = e.typing;
+      typingindicatorView.render();
     }
-    typingindicatorView.render();
   });
 
   /**
@@ -121,21 +151,17 @@ module.exports = function(client) {
       paginationWindow: messagesQuery.paginationWindow + 30
     });
   });
-  titlebarView.on('conversation:title', function(title) {
-    newConversation.metadata = { title: title };
-  });
-  participantView.on('conversation:participants', function(participants) {
-    newConversation.participants = participants;
-    newConversation.distinct = participants.length === 1;
-  });
-  sendView.on('conversation:create', function(text) {
+
+  participantsView.on('conversation:create', function(participants) {
     // See http://static.layer.com/sdk/docs/#!/api/layer.Conversation
-    var conversation = client.createConversation(newConversation);
-    conversation.createMessage(text).send();
-    conversation.on('conversations:sent', function() {
-      var uuid = conversation.id.substr(conversation.id.lastIndexOf('/') + 1);
-      router.navigate('conversations/' + uuid, {trigger: true});
+    var conversation = client.createConversation({
+      participants: participants,
+      distinct: participants.length === 1
     });
+
+    // Update our location.
+    var uuid = conversation.id.substr(conversation.id.lastIndexOf('/') + 1);
+    router.navigate('conversations/' + uuid, {trigger: true});
   });
 
   /**
@@ -156,23 +182,26 @@ module.exports = function(client) {
     sendView.conversation = conversation;
 
     typingPublisher.setConversation(conversation);
+    renderAll();
+  });
 
+  router.on('route:conversation:new', function() {
+    participantsView.show();
+  });
+
+  router.on('route:announcements', function() {
+    announcementsView.show();
+  });
+
+  function renderAll() {
     conversationsView.render();
     messagesView.render();
     titlebarView.render();
     sendView.render();
-    participantView.hide();
-  });
-
-  router.on('route:conversation:new', function() {
-    newConversation = {};
-
-    conversationsView.newConversation();
-    messagesView.newConversation();
-    titlebarView.newConversation();
-    sendView.newConversation();
-    participantView.newConversation();
-  });
+    participantsView.render();
+    typingindicatorView.typing = [];
+    typingindicatorView.render();
+  }
 
   if (window.location.hash) Backbone.history.loadUrl(Backbone.history.fragment);
 };

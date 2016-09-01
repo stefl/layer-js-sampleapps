@@ -59,9 +59,17 @@ export default class ConversationHeader extends Component {
    * Render a title with an button for changing to edit mode
    */
   renderTitle() {
-    const { activeConversation, disableEdit } = this.props;
+    const { activeConversation, disableEdit, owner } = this.props;
     var title = '← Create a new conversation or select a conversation from the list.';
-    if (activeConversation) title = activeConversation.metadata.title || activeConversation.participants.join(', ');
+    if (activeConversation) {
+      if (activeConversation.metadata.title) {
+        title = activeConversation.metadata.title;
+      } else {
+        title = activeConversation.participants
+        .filter(user => user !== owner)
+        .join(', ');
+      }
+    }
 
     return (
       <div className='conversation-header panel-header'>
@@ -77,10 +85,10 @@ export default class ConversationHeader extends Component {
   }
 
   render() {
-    const { editingNewConversation, editingTitle } = this.props;
+    const { editingTitle } = this.props;
 
-    // Show the title input on the NewConversation page or after clicking the pencil icon.
-    if (editingNewConversation || editingTitle) {
+    // Show the title input after clicking the pencil icon.
+    if (editingTitle) {
       return this.renderEditing();
     }
     // Otherwise show the title.

@@ -26,7 +26,15 @@ module.exports = Backbone.View.extend({
               '</div>';
     }
     else if (this.conversation) {
-      var title = this.conversation.metadata.title || this.conversation.participants.join(', ').replace(/(.*),(.*?)/, '$1 and$2');
+      var ownerId = this.conversation.getClient().userId;
+      var title = this.conversation.metadata.title;
+      if (!title) {
+        title = this.conversation.participants
+        .filter(function(userId) {
+          return userId !== ownerId;
+        })
+        .join(', ').replace(/(.*),(.*?)/, '$1 and$2');
+      }
       html = '<div class="title-inner">' + title +
                 '<a href="#" class="edit-title-icon" title="Edit conversation title"><i class="fa fa-pencil"></i></a>' +
               '</div>';

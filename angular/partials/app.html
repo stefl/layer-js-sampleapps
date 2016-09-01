@@ -12,10 +12,21 @@
     </div>
 
     <div class="right-panel">
-      <div ng-include="'partials/conversation-panel.html'"
-           ng-hide="chatCtrlState.showUserList"></div>
-      <div ng-include="'partials/new-conversation-panel.html'"
-           ng-show="chatCtrlState.showUserList"></div>
+      <div ng-include="'partials/conversation-panel.html'"></div>
+    </div>
+    <div
+      class="announcements-dialog dialog"
+      ng-show="chatCtrlState.showAnnouncements"
+      ng-click="chatCtrlState.showAnnouncements = false"
+      ng-controller="announcementDialogCtrl">
+      <div ng-include="'partials/announcements/message-list.html'"></div>
+    </div>
+    <div
+      class="participants-dialog dialog"
+      ng-show="chatCtrlState.showParticipants"
+      ng-click="chatCtrlState.showParticipants = false"
+      ng-controller="participantsDialogCtrl">
+      <div ng-include="'partials/participants-dialog.html'"></div>
     </div>
   </div>
 </div>

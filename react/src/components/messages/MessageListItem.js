@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import TextMessagePart from './TextMessagePart';
-import Avatar from './Avatar';
+import QuoteMessagePart from './QuoteMessagePart';
+import Avatar from '../Avatar';
 
 /**
  * This Component renders a single Message in a Message List
@@ -39,25 +40,37 @@ export default class MessageListItem extends Component {
     }
   }
 
+  renderPart(messagePart) {
+    switch(messagePart.mimeType) {
+      case 'text/plain':
+        return (
+          <TextMessagePart
+            key={messagePart.id}
+            messagePart={messagePart}/>);
+      case 'text/quote':
+        return (
+          <QuoteMessagePart
+            key={messagePart.id}
+            messagePart={messagePart}/>);
+      default:
+        return (<div key={messagePart.id} />);
+    }
+  }
+
+
   render() {
-    const { message, users } = this.props;
-    const user = message.sender.userId;
+    const { message } = this.props;
+    const user = message.sender;
     const messageStatus = this.getMessageStatus(message);
 
     return (
       <div className='message-item'>
         <Avatar user={user}/>
         <div className='main'>
-          <span className='name'>{user}</span>
+          <span className='name'>{user.displayName}</span>
 
           <div className='message-parts'>
-            {message.parts.map((messagePart) => {
-              return (
-                <TextMessagePart
-                  key={messagePart.id}
-                  messagePart={messagePart}/>
-              )
-            })}
+            {message.parts.map(messagePart => this.renderPart(messagePart))}
           </div>
         </div>
         <span className='timestamp'>

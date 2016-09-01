@@ -4,14 +4,14 @@ import { Provider } from 'react-redux';
 import { Client } from 'layer-sdk';
 import { LayerProvider } from 'layer-react';
 import Messenger from './containers/Messenger';
-import NewConversation from './containers/NewConversation';
 import ActiveConversation from './containers/ActiveConversation';
 import DefaultPanel from './components/DefaultPanel';
 import configureStore from './store/configureStore';
-import { fetchUsersSuccess } from './actions/messenger';
+import { usersSet } from './actions/messenger';
 import { IndexRoute, Route } from 'react-router';
 import { ReduxRouter } from 'redux-router';
 
+let client;
 /**
  * Wait for identity dialog message to complete
  */
@@ -21,9 +21,11 @@ window.addEventListener('message', function(evt) {
   /**
    * Initialize Layer Client with `appId`
    */
-  const client = new Client({
-    appId: window.layerSample.appId
-  });
+  if (!client) {
+    client = new Client({
+      appId: window.layerSample.appId
+    });
+  }
 
   /**
    * Client authentication challenge.
@@ -35,15 +37,24 @@ window.addEventListener('message', function(evt) {
     window.layerSample.challenge(e.nonce, e.callback);
   });
 
+  client.on('ready', () => {
+    store.dispatch(usersSet(client.userId, window.layerSample.users));
+  });
+
+  /**
+   * Start authentication
+   */
+  client.connect(window.layerSample.userId);
+
+  /**
+   * Start authentication
+   */
+  client.connect(window.layerSample.userId);
+
   /**
    * Share the client with the middleware layer
    */
   const store = configureStore(client);
-
-  /**
-   * Bootstrap users
-   */
-  store.dispatch(fetchUsersSuccess(window.layerSample.users));
 
   // Render the UI wrapped in a LayerProvider
   render(
@@ -52,7 +63,6 @@ window.addEventListener('message', function(evt) {
         <ReduxRouter>
           <Route path='/' component={Messenger}>
             <IndexRoute component={DefaultPanel}/>
-            <Route path='/new' component={NewConversation}/>
             <Route path='/conversations/:conversationId' component={ActiveConversation}/>
           </Route>
         </ReduxRouter>

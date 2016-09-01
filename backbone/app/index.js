@@ -31,12 +31,17 @@ window.addEventListener('message', function(evt) {
   });
 
   /**
+   * Start authentication
+   */
+  client.connect(window.layerSample.userId);
+
+  /**
    * Client ready. Initialize controller.
    */
   client.once('ready', function() {
+    $('.left-panel .panel-header .title').text(client.userId + '\'s Conversations');
     controller(client);
   });
 
   // Set conversations title
-  $('.panel-header .title').text(window.layerSample.user + '\'s Conversations');
 }, false);

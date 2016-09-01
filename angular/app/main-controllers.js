@@ -64,6 +64,8 @@ sampleControllers.controller('appCtrl', function ($scope) {
       $scope.appCtrlState.user = window.layerSample.user;
       $scope.$digest();
     });
+
+    $scope.appCtrlState.client.connect(window.layerSample.userId);
   };
 });
 
@@ -74,7 +76,9 @@ sampleControllers.controller('appCtrl', function ($scope) {
  */
 sampleControllers.controller('chatCtrl', function ($scope, $route, $location) {
   $scope.chatCtrlState = {
-    showUserList: false,
+    showParticipants: false,
+    showAnnouncements: false,
+    unreadAnnouncements: 0,
     currentConversation: null
   };
 
@@ -100,25 +104,14 @@ sampleControllers.controller('chatCtrl', function ($scope, $route, $location) {
 
     // If the url matches a Conversation URL, show it.
     if (matches) {
-      if ($scope.appCtrlState.isReady) {
+      if ($scope.appCtrlState.client.isReady) {
         $scope.loadConversation('layer://' + matches[0]);
       } else {
-        $scope.$watch('appCtrlState.isReady', function() {
+        $scope.appCtrlState.client.once('ready', function() {
           $scope.loadConversation('layer://' + matches[0]);
         });
       }
-      $scope.chatCtrlState.showUserList = false;
-    }
-
-    // If the URL matches a new Conversation, show the Create Conversation UI
-    // and insure all checkboxes are clear.
-    else if ($location.$$url.match(/\/conversations\/new$/)) {
-      $scope.chatCtrlState.showUserList = true;
-      $scope.chatCtrlState.currentConversation = null;
-      Array.prototype.slice.call(document.querySelectorAll('.user-list :checked'))
-        .forEach(function(node) {
-          node.checked = false;
-        });
+      $scope.chatCtrlState.showParticipants = false;
     }
   }
 
@@ -127,14 +120,14 @@ sampleControllers.controller('chatCtrl', function ($scope, $route, $location) {
   // Handle the initial url state we loaded the app with.
   handleLocation();
 
-  /**
-   * Utility for rendering all users in a Conversation.
-   */
-  $scope.getConversationAvatars = function(conversationObject) {
-    return conversationObject.participants.map(function(participant) {
-      return participant.substr(0, 2).toUpperCase();
-    });
-  };
+  $scope.showNewConversation = function() {
+    $scope.chatCtrlState.showParticipants = true;
+    Array.prototype.slice.call(document.querySelectorAll('.participant-list :checked'))
+      .forEach(function(node) {
+        node.checked = false;
+      });
+  }
+
 
   /**
    * Utility for getting the title for a Conversation
@@ -145,58 +138,13 @@ sampleControllers.controller('chatCtrl', function ($scope, $route, $location) {
       if (conversationObject.metadata.title) return conversationObject.metadata.title;
 
       // A join of all participants names is the backup title.
-      return conversationObject.participants.join(', ');
+      return conversationObject.participants
+      .filter(function(userId) {
+        return userId !== $scope.chatCtrlState.user;
+      })
+      .join(', ');
     }
     return '';
   };
 });
 
-/**
- * The Conversation List Controller manages the List of Conversation on
- * the left column.
- *
- * This Controller manages the Conversation Query which delivers
- * all Conversations and any changes to the Conversations.
- *
- * Rendering is done by iterating over $scope.query.data
- */
-sampleControllers.controller('conversationListCtrl', function ($scope, $rootScope) {
-  // Once we are authenticated and the User list is loaded, create the query
-  $scope.$watch('appCtrlState.isReady', function(newValue) {
-    if (newValue) {
-
-      // Create the Conversation List query
-      $scope.query = $scope.appCtrlState.client.createQuery({
-        model: layer.Query.Conversation,
-        dataType: 'object',
-        paginationWindow: 500
-      });
-
-      /**
-       * Any time the query data changes, rerender.  Data changes when:
-       *
-       * * The Conversation data has loaded from the server
-       * * A new Conversation is created and added to the results
-       * * A Conversation is deleted and removed from the results
-       * * Any Conversation in the results has a change of metadata or participants
-       */
-      $scope.query.on('change', function() {
-        $rootScope.$digest();
-      });
-    }
-  }, this);
-
-  /**
-   * This deletes a Conversation from the server.
-   */
-  $scope.deleteConversation = function(conversation) {
-    var conversationInstance = $scope.appCtrlState.client.getConversation(conversation.id);
-    if (conversationInstance) {
-      window.setTimeout(function() {
-        if (confirm('Are you sure you want to delete this conversation?')) {
-          conversationInstance.delete(layer.Constants.DELETION_MODE.ALL);
-        }
-      }, 1);
-    }
-  };
-});

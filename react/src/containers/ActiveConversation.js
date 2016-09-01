@@ -5,21 +5,32 @@ import { QueryBuilder } from 'layer-sdk';
 import { connectQuery } from 'layer-react';
 import * as MessengerActions from '../actions/messenger';
 import ConversationHeader from '../components/ConversationHeader';
-import MessageList from '../components/MessageList';
+import MessageList from '../components/messages/MessageList';
 import MessageComposer from '../components/MessageComposer';
 import TypingIndicatorContainer from './TypingIndicatorContainer';
 
-function mapStateToProps({ activeConversation, router }) {
+/**
+ * Copy data from reducers into our properties
+ */
+function mapStateToProps({ activeConversation, router, app }) {
   return {
     ...activeConversation,
-    activeConversationId: `layer:///conversations/${router.params.conversationId}`
+    activeConversationId: `layer:///conversations/${router.params.conversationId}`,
+    owner: app.owner,
   };
 }
 
+/**
+ * Copy all actions into this.props.actions
+ */
 function mapDispatchToProps(dispatch) {
   return { actions: bindActionCreators(MessengerActions, dispatch) };
 }
 
+/**
+ * Setup the Messages Queriy; will set the query results to be
+ * this.props.messages.
+ */
 function getQueries({ activeConversationId, messagePagination }) {
   return {
     messages: QueryBuilder
@@ -37,23 +48,13 @@ export default class ActiveConversation extends Component {
     const {
       editingTitle,
       title,
+      owner,
       composerMessage,
       activeConversationId,
       conversations,
       messages,
-      users,
       actions
     } = this.props;
-    const {
-      editConversationTitle,
-      changeConversationTitle,
-      saveConversationTitle,
-      cancelEditConversationTitle,
-      loadMoreMessages,
-      changeComposerMessage,
-      submitComposerMessage,
-      markMessageRead
-    } = actions;
 
     const activeConversation = conversations.find((conversation) => {
       return conversation.id === activeConversationId;
@@ -65,27 +66,26 @@ export default class ActiveConversation extends Component {
       <div className='right-panel'>
         <ConversationHeader
           title={title}
+          owner={owner}
           activeConversation={activeConversation}
           editingTitle={editingTitle}
-          onEditConversationTitle={editConversationTitle}
-          onChangeConversationTitle={changeConversationTitle}
-          onSaveConversationTitle={saveConversationTitle}
-          onCancelEditConversationTitle={cancelEditConversationTitle}/>
+          onEditConversationTitle={actions.editConversationTitle}
+          onChangeConversationTitle={actions.changeConversationTitle}
+          onSaveConversationTitle={actions.saveConversationTitle}
+          onCancelEditConversationTitle={actions.cancelEditConversationTitle}/>
 
         <MessageList
           messages={messages}
-          users={users}
-          onMarkMessageRead={markMessageRead}
-          onLoadMoreMessages={loadMoreMessages}/>
+          onMarkMessageRead={actions.markMessageRead}
+          onLoadMoreMessages={actions.loadMoreMessages}/>
 
         <TypingIndicatorContainer
-          users={users}
           conversationId={activeConversationId}/>
 
         <MessageComposer
           value={composerMessage}
-          onChange={changeComposerMessage}
-          onSubmit={submitComposerMessage}/>
+          onChange={actions.changeComposerMessage}
+          onSubmit={actions.submitComposerMessage}/>
       </div>
     );
   }

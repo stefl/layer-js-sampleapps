@@ -4,8 +4,9 @@ import toUUID from '../utils/toUUID';
 export const CLIENT_READY = 'CLIENT_READY';
 export const CHANGE_COMPOSER_MESSAGE = 'CHANGE_COMPOSER_MESSAGE';
 export const SUBMIT_COMPOSER_MESSAGE = 'SUBMIT_COMPOSER_MESSAGE';
-export const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS';
-export const NEW_CONVERSATION = 'NEW_CONVERSATION';
+export const SHOW_PARTICIPANTS = 'SHOW_PARTICIPANTS';
+export const HIDE_PARTICIPANTS = 'HIDE_PARTICIPANTS';
+export const CREATE_CONVERSATION = 'CREATE_CONVERSATION';
 export const ADD_PARTICIPANT = 'ADD_PARTICIPANT';
 export const REMOVE_PARTICIPANT = 'REMOVE_PARTICIPANT';
 export const EDIT_CONVERSATION_TITLE = 'EDIT_CONVERSATION_TITLE';
@@ -16,6 +17,19 @@ export const MARK_MESSAGE_READ = 'MARK_MESSAGE_READ';
 export const LOAD_MORE_MESSAGES = 'LOAD_MORE_MESSAGES';
 export const ROUTER_DID_CHANGE = '@@reduxReactRouter/routerDidChange';
 export const DELETE_CONVERSATION = 'DELETE_CONVERSATION';
+export const SHOW_ANNOUNCEMENTS = 'SHOW_ANNOUNCEMENTS';
+export const HIDE_ANNOUNCEMENTS = 'HIDE_ANNOUNCEMENTS';
+export const USERS_SET = 'USERS_SET';
+
+export function usersSet(owner, users) {
+  return {
+    type: USERS_SET,
+    payload: {
+      owner,
+      users
+    }
+  };
+}
 
 export function clientReady() {
   return {
@@ -51,37 +65,42 @@ export function submitComposerMessage() {
   };
 }
 
-export function fetchUsersSuccess(users) {
-  return {
-    type: FETCH_USERS_SUCCESS,
-    payload: {
-      users
-    }
-  };
-}
-
 export function goHome() {
   return pushState(null, '/');
 }
 
-export function newConversation() {
-  return pushState(null, '/new');
+export function showParticipants() {
+  return {
+    type: SHOW_PARTICIPANTS
+  };
 }
 
-export function addParticipant(userId) {
+export function hideParticipants() {
+  return {
+    type: HIDE_PARTICIPANTS
+  };
+}
+
+export function createConversation() {
+  return {
+    type: CREATE_CONVERSATION
+  };
+}
+
+export function addParticipant(user) {
   return {
     type: ADD_PARTICIPANT,
     payload: {
-      userId
+      user
     }
   };
 }
 
-export function removeParticipant(userId) {
+export function removeParticipant(user) {
   return {
     type: REMOVE_PARTICIPANT,
     payload: {
-      userId
+      user
     }
   };
 }
@@ -126,4 +145,17 @@ export function markMessageRead(messageId) {
       messageId
     }
   }
+}
+
+
+export function showAnnouncements() {
+  return {
+    type: SHOW_ANNOUNCEMENTS
+  };
+}
+
+export function hideAnnouncements() {
+  return {
+    type: HIDE_ANNOUNCEMENTS
+  };
 }

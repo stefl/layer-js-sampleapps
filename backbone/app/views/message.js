@@ -6,20 +6,24 @@ module.exports = Backbone.View.extend({
   tagName: 'div',
   className: 'message-item',
   render: function() {
-    var name = this.model.sender.userId || 'Unknown';
-    var initial = name.substr(0, 2).toUpperCase();
 
     var timestamp = window.layerSample.dateFormat(this.model.sentAt);
     var parts = '';
 
     if (!this.model.isDestroyed) {
       this.model.parts.forEach(function(part) {
-        parts += '<div class="bubble text">' + part.body + '</div>';
+        switch(part.mimeType) {
+          case 'text/plain':
+            parts += '<div class="bubble text">' + part.body + '</div>';
+            break;
+          case 'text/quote':
+            parts += '<div class="bubble quote">' + part.body + '</div>';
+            break;
+        }
       });
 
-      this.$el.append('<div class="avatar">' + initial + '</div>' +
-                      '<div class="message-content">' +
-                        '<span class="name">' + name + '</span>' +
+      this.$el.append('<div class="message-content">' +
+                        '<span class="name">' + (this.model.sender.userId || this.model.sender.name) + '</span>' +
                         '<div class="message-parts">' + parts + '</div>' +
                       '</div>' +
                       '<div class="timestamp">' + timestamp +
@@ -38,5 +42,19 @@ module.exports = Backbone.View.extend({
       default:
         return 'unread';
     }
+  },
+  getMessageParts: function(part) {
+    var bubbleType = '';
+
+    switch (part.mimeType) {
+      case 'text/plain':
+        bubbleType = 'text';
+        break;
+      case 'text/quote':
+        bubbleType = 'quote';
+        break;
+    }
+
+    return '<div class="bubble ' + bubbleType + '">' + part.body + '</div>';
   }
 });

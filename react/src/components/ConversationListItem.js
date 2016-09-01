@@ -17,17 +17,19 @@ export default class ConversationListItem extends Component {
   }
 
   render() {
-    const { conversation, users, active, deleteConversation } = this.props;
-    const participantUsers = conversation.participants;
+    const { conversation, active, deleteConversation, owner } = this.props;
+    const participantUsers = conversation.participants.filter(user => user !== owner);
     const conversationUrl = `/conversations/${toUUID(conversation.id)}`;
 
     const styles = cx({
-      participant: true,
+      'conversation-item': true,
       'unread-messages': conversation.unreadCount > 0,
       'selected-conversation': active
     });
 
     const title = conversation.metadata.title || participantUsers.join(', ');
+
+    // Render the UI
     return (
       <Link to={conversationUrl} className={styles}>
         <Avatar users={participantUsers}/>
