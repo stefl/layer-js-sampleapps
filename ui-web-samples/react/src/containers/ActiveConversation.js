@@ -15,6 +15,7 @@ import * as MessengerActions from '../actions/messenger';
 import ConversationHeader from '../components/ConversationHeader';
 import * as LayerUIWidgets from '../layer-ui-adapter';
 const ConversationPanel  = LayerUIWidgets.ConversationPanel;
+import { utils as LayerUIUtil } from 'layer-ui-web';
 
 /**
  * Copy data from reducers into our properties
@@ -72,6 +73,7 @@ export default class ActiveConversation extends Component {
         <ConversationPanel
           ref='conversationPanel'
           appId={window.layerSample.appId}
+          onRenderListItem={LayerUIUtil.dateSeparator}
           conversationId={activeConversationId}/>
       </div>
     );
