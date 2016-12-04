@@ -13,8 +13,7 @@ import { QueryBuilder } from 'layer-websdk';
 import { connectQuery } from 'layer-react';
 import * as MessengerActions from '../actions/messenger';
 import ConversationHeader from '../components/ConversationHeader';
-import * as LayerUIWidgets from '../layer-ui-adapter';
-const ConversationPanel  = LayerUIWidgets.ConversationPanel;
+import { ConversationPanel } from '../layer-ui-adapter';
 import { utils as LayerUIUtil } from 'layer-ui-web';
 
 /**

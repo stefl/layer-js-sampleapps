@@ -11,10 +11,8 @@ import { connect } from 'react-redux';
 import { QueryBuilder } from 'layer-websdk';
 import { connectQuery } from 'layer-react';
 import * as MessengerActions from '../actions/messenger';
-import * as LayerUIWidgets from '../layer-ui-adapter';
+import { ConversationsList, Notifier } from '../layer-ui-adapter';
 
-const ConversationsList = LayerUIWidgets.ConversationsList;
-const Notifier = LayerUIWidgets.Notifier;
 import ConversationsListHeader from '../components/ConversationsListHeader';
 
 import AnnouncementsList from '../components/announcements/MessageList';
