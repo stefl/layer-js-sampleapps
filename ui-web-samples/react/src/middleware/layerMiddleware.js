@@ -1,4 +1,4 @@
-import { pushState } from 'redux-router';
+import { push } from 'redux-router';
 import toUUID from '../utils/toUUID';
 import {
   CREATE_CONVERSATION,
@@ -22,7 +22,7 @@ function internalSelectConversation(layerClient, state, payload, next) {
       next(selectConversation(evt.target.toObject()));
     }, selectConversation);
   }
-  return next(pushState(null, `/conversations/${toUUID(payload.conversation.id)}`));
+  return next(push(`/conversations/${toUUID(payload.conversation.id)}`));
 }
 
 function handleAction(layerClient, state, action, next) {

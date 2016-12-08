@@ -1,4 +1,4 @@
-import { pushState } from 'redux-router';
+import { push } from 'redux-router';
 import toUUID from '../utils/toUUID';
 
 export const CLIENT_READY = 'CLIENT_READY';
@@ -38,7 +38,7 @@ export function clientReady() {
 }
 
 export function selectConversation(conversationId) {
-  return pushState(null, `/conversations/${toUUID(conversationId)}`);
+  return push(`/conversations/${toUUID(conversationId)}`);
 }
 
 export function deleteConversation(conversationId) {
@@ -75,7 +75,7 @@ export function fetchUsersSuccess(users) {
 }
 
 export function goHome() {
-  return pushState(null, '/');
+  return push('/');
 }
 
 export function showParticipants() {
