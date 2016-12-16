@@ -365,3 +365,12 @@ layer-conversation-panel {
   padding: 10px 20px;
 }
 
+.layer-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  margin-left: -200px;
+  margin-top: -200px;
+  opacity: 0.1;
+}

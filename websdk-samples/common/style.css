@@ -343,7 +343,7 @@ div.avatar-image.cluster span:last-child {
   -webkit-flex-grow: 1;
   flex-grow: 1;
 }
-.message-list .layer-logo {
+.layer-logo {
   position: absolute;
   top: 50%;
   left: 50%;

@@ -15,7 +15,8 @@ controllers.controller('conversationCtrl', function($scope) {
     title: ''
   };
   $scope.composeButtons = [
-    document.createElement('layer-file-upload-button')
+    document.createElement('layer-file-upload-button'),
+    document.createElement('layer-send-button')
   ];
 
   // The Currently selected Conversation has changed

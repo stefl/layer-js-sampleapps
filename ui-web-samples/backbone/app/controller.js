@@ -58,9 +58,12 @@ module.exports = function(client) {
     }
   });
 
-  var fileButton = document.createElement('layer-file-upload-button');
+
   var conversationView = new ConversationView(client, {
-    composeButtons: [fileButton]
+    composeButtons: [
+      document.createElement('layer-file-upload-button'),
+      document.createElement('layer-send-button')
+    ]
   });
   var titlebarView = new TitlebarView();
   var participantsView = new ParticipantsView(client);

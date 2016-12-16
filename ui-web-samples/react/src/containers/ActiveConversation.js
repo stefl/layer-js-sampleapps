@@ -38,8 +38,12 @@ function mapDispatchToProps(dispatch) {
 export default class ActiveConversation extends Component {
   componentDidMount() {
     var node = ReactDom.findDOMNode(this.refs.conversationPanel);
+    var button = document.createElement('button');
+    button.innerHTML = 'Sample Button';
     node.composeButtons = [
-      document.createElement('layer-file-upload-button')
+      document.createElement('layer-file-upload-button'),
+      button,
+      document.createElement('layer-send-button'),
     ];
   }
 
