@@ -24,7 +24,7 @@ The [Angular App](./websdk-samples/angular) uses:
 
 ### Backbone
 
-The [Angular App](./websdk-samples/backbone) uses:
+The [Backbone App](./websdk-samples/backbone) uses:
 
 * CDN to include the Layer WebSDK
 * Standard Backbone Views to work with Layer Query data
