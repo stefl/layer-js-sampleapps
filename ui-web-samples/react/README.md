@@ -21,6 +21,6 @@ Point your browser to: [localhost:8080](http://localhost:8080)
 Understanding this application requires understanding two things:
 
 1. [Redux](http://rackt.org/redux/) architecture
-2. [layer-react](./layer-react) module
+2. [layer-react](https://github.com/layerhq/layer-react) module
 
 The layer-react module provides a LayerProvider for wrapping UI Components; it takes as input a Client, and passes to its children the output of Conversation and Message queries.
