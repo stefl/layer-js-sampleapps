@@ -3,6 +3,7 @@
  * and a button for creating a new Conversation.
  */
 import React, { Component } from 'react';
+import { Presence } from '../layer-ui-adapter';
 
 export default class ConversationListHeader extends Component {
   /**
@@ -21,12 +22,24 @@ export default class ConversationListHeader extends Component {
     this.props.onShowAnnouncements();
   }
 
+  /**
+   * Toggle presence between BUSY and AVAILABLE
+   */
+  togglePresence = (event) => {
+    event.preventDefault();
+    this.props.onTogglePresence();
+  }
+
   render() {
-    const { unreadAnnouncements, user } = this.props;
+    const { unreadAnnouncements, user, appId } = this.props;
     const announcementClasses = ['announcements-button'];
     if (unreadAnnouncements) announcementClasses.push('unread-announcements');
     return (
       <div className='panel-header conversations-header'>
+        <Presence
+          item={user}
+          appId={appId}
+          onPresenceClick={this.togglePresence} />
         <div className='title'>{user.displayName}'s Conversations</div>
         <a className={announcementClasses.join(' ')} onClick={this.showAnnouncements}>
           <i className="icon fa fa-bullhorn"></i>

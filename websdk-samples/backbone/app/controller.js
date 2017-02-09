@@ -10,6 +10,7 @@ var SendView = require('./views/send');
 var TypingIndicatorView = require('./views/typingindicator');
 var ParticipantsView = require('./views/participants-dialog');
 var AnnouncementsView = require('./views/announcements');
+var PresenceView = require('./views/presence');
 
 /**
  * Client router
@@ -36,6 +37,7 @@ module.exports = function(client) {
   var typingindicatorView = new TypingIndicatorView();
   var participantsView = new ParticipantsView();
   var announcementsView = new AnnouncementsView();
+  var presenceView = new PresenceView({model: client.user});
 
   participantsView.user = client.user;
 
@@ -212,6 +214,7 @@ module.exports = function(client) {
     titlebarView.render();
     sendView.render();
     participantsView.render();
+    presenceView.render();
   }
 
   if (window.location.hash) Backbone.history.loadUrl(Backbone.history.fragment);

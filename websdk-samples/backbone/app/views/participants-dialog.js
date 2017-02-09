@@ -2,6 +2,7 @@
 
 var _ = require('underscore');
 var Backbone = require('backbone');
+var ParticipantView = require('./participant');
 
 module.exports = Backbone.View.extend({
   el: '.participants-dialog',
@@ -16,16 +17,9 @@ module.exports = Backbone.View.extend({
   },
   addUser: function(participant) {
     if (participant !== this.user) {
-      this.$list.append(
-        '<div class="participant-item">' +
-          '<div class="avatar-image"><img src="' + participant.avatarUrl + '" /></div>' +
-          '<label for="participant-checkbox-' + participant.id + '">' + participant.displayName + '</label>' +
-          '<input value="' + participant.userId + '" ' +
-              'id="participant-checkbox-' + participant.id + '" ' +
-              'type="checkbox" ' +
-              'name="userList"/>' +
-        '</div>'
-      );
+      var participantView = new ParticipantView({model: participant});
+      this.$list.append(participantView.$el);
+      participantView.render();
     }
   },
   createConversation: function() {
@@ -34,6 +28,7 @@ module.exports = Backbone.View.extend({
       participants.push(input.value);
     });
     this.trigger('conversation:create', participants);
+    this.hide();
   },
   events: {
     'click .participant-list-container': 'clickStopPropagation',

@@ -47,4 +47,11 @@ controllers.controller('conversationListCtrl', function ($scope, $rootScope) {
       }, 1);
     }
   };
+
+  /**
+   * Only show participants in the Conversation that aren't YOU.  You know your a participant...
+   */
+  $scope.filterParticipants = function filterParticipants(user) {
+    return !user.sessionOwner;
+  }
 });

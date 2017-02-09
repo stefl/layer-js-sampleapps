@@ -6,6 +6,7 @@ import {
   SELECT_CONVERSATION_ID,
   SAVE_CONVERSATION_TITLE,
   MARK_MESSAGE_READ,
+  TOGGLE_PRESENCE,
   ROUTER_DID_CHANGE,
   clientReady,
   selectConversation
@@ -87,6 +88,13 @@ function handleAction(layerClient, state, action, next) {
         .getMessage(payload.messageId).isRead = true;
       return;
 
+    case TOGGLE_PRESENCE:
+      if (layerClient.user.presence.status === layer.Identity.STATUS.BUSY) {
+        layerClient.user.setStatus(layer.Identity.STATUS.AVAILABLE);
+      } else {
+        layerClient.user.setStatus(layer.Identity.STATUS.BUSY);
+      }
+      return;
     default:
       return;
   }

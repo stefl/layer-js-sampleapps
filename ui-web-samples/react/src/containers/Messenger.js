@@ -133,9 +133,11 @@ export default class Messenger extends Component {
           onNotificationClick={this.onNotificationClick}></Notifier>
         <ConversationsListHeader
           user={user}
+          appId={appId}
           unreadAnnouncements={Boolean(announcements.filter(item => item.isUnread).length)}
           onShowAnnouncements={actions.showAnnouncements}
-          onShowParticipants={actions.showParticipants}/>
+          onShowParticipants={actions.showParticipants}
+          onTogglePresence={actions.togglePresence}/>
         <ConversationsList
           appId={appId}
           selectedConversationId={activeConversationId}

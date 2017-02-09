@@ -87,7 +87,8 @@ export default class Messenger extends Component {
           owner={owner}
           unreadAnnouncements={Boolean(announcements.filter(item => item.isUnread).length)}
           onShowAnnouncements={actions.showAnnouncements}
-          onShowParticipants={actions.showParticipants}/>
+          onShowParticipants={actions.showParticipants}
+          onTogglePresence={actions.togglePresence}/>
         <ConversationList
           conversations={conversations}
           activeConversationId={activeConversationId}

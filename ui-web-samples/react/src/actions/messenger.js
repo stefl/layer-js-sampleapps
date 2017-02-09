@@ -20,6 +20,7 @@ export const ROUTER_DID_CHANGE = '@@reduxReactRouter/routerDidChange';
 export const SHOW_ANNOUNCEMENTS = 'SHOW_ANNOUNCEMENTS';
 export const HIDE_ANNOUNCEMENTS = 'HIDE_ANNOUNCEMENTS';
 export const MARK_MESSAGE_READ = 'MARK_MESSAGE_READ';
+export const TOGGLE_PRESENCE = 'TOGGLE_PRESENCE';
 
 
 export function clientReady(payload) {
@@ -128,5 +129,11 @@ export function showAnnouncements() {
 export function hideAnnouncements() {
   return {
     type: HIDE_ANNOUNCEMENTS
+  };
+}
+
+export function togglePresence() {
+  return {
+    type: TOGGLE_PRESENCE
   };
 }

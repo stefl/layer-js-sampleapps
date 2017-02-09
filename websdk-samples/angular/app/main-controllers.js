@@ -114,6 +114,19 @@ sampleControllers.controller('chatCtrl', function ($scope, $route, $location) {
     });
   };
 
+  /**
+   * Handle the user clicking to toggle presence
+   */
+  $scope.togglePresence = function togglePresence() {
+    var user = $scope.appCtrlState.client.user;
+    if (user.presence.status === layer.Identity.STATUS.AVAILABLE) {
+      user.setStatus(layer.Identity.STATUS.BUSY);
+    } else {
+      user.setStatus(layer.Identity.STATUS.AVAILABLE);
+    }
+  };
+
+
   /*
    * Whenever the url changes, Load the requested Conversation
    * (if any), update our state and render

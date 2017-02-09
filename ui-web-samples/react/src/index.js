@@ -7,7 +7,6 @@ import Messenger from './containers/Messenger';
 import ActiveConversation from './containers/ActiveConversation';
 import DefaultPanel from './components/DefaultPanel';
 import configureStore from './store/configureStore';
-import { ownerSet } from './actions/messenger';
 import { IndexRoute, Route } from 'react-router';
 import { ReduxRouter } from 'redux-router';
 

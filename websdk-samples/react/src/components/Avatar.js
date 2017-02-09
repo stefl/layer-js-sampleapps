@@ -20,6 +20,9 @@ export default class Avatar extends Component {
       cluster: usersToRender && usersToRender.length > 1
     });
 
-    return <div className={styles}>{usersToRender.filter(item => item.id).map(this.renderUserItem)}</div>;
+    return <div className={styles}>
+      {usersToRender.length === 1 ? <div className={'layer-presence layer-presence-' + usersToRender[0].presence.status.toLowerCase()} /> : <div className='layer-presence-hidden' />}
+      {usersToRender.filter(item => item.id).map(this.renderUserItem)}
+    </div>;
   }
 }

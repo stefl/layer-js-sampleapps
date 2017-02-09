@@ -113,6 +113,18 @@ sampleControllers.controller('chatCtrl', function ($scope, $location) {
     });
   };
 
+  /**
+   * Handle the user clicking to toggle presence
+   */
+  $scope.togglePresence = function togglePresence() {
+    var user = $scope.appCtrlState.client.user;
+    if (user.presence.status === layer.Identity.STATUS.AVAILABLE) {
+      user.setStatus(layer.Identity.STATUS.BUSY);
+    } else {
+      user.setStatus(layer.Identity.STATUS.AVAILABLE);
+    }
+  };
+
   /*
    * Whenever the url changes, Load the requested Conversation
    * (if any), update our state and render
@@ -149,7 +161,7 @@ sampleControllers.controller('chatCtrl', function ($scope, $location) {
    * The user selects a Conversation in the <layer-conversations-list>
    */
   $scope.selectConversation = function(evt) {
-    $scope.updateSelectedConversation(evt.detail.conversation);
+    $scope.updateSelectedConversation(evt.detail.item);
     $scope.$apply();
   };
 
@@ -180,14 +192,14 @@ sampleControllers.controller('chatCtrl', function ($scope, $location) {
 
   $scope.onMessageNotification = function(evt) {
     if ((!$scope.chatCtrlState.currentConversation ||
-        evt.detail.message.conversationId === $scope.chatCtrlState.currentConversation.id) &&
+        evt.detail.item.conversationId === $scope.chatCtrlState.currentConversation.id) &&
         !evt.detail.isBackground) {
       evt.preventDefault();
     }
   };
 
   $scope.onNotificationClick = function(evt) {
-    var message = evt.detail.message;
+    var message = evt.detail.item;
     $scope.chatCtrlState.currentConversation = message.getConversation().toObject();
     $location.path(message.conversationId.replace(/^layer:\/\/\//, ''));
     $scope.$apply();

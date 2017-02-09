@@ -137,11 +137,13 @@ body {
 
 /* Avatars */
 div.avatar-image {
-  border-radius: 50%;
   position: relative;
   overflow: hidden;
 }
 
+div.avatar-image span {
+  border-radius: 50%;
+}
 div.avatar-image.cluster, .conversation-item .avatar-image {
   border-radius: 0;
   background: none;
@@ -669,4 +671,37 @@ div.avatar-image.cluster span:last-child {
 
 .participant-item input {
   margin-right: 10px;
+}
+
+.layer-presence {
+  width: 16px;
+  height: 16px;
+  border-radius: 30px;
+  margin-right: 10px;
+}
+.layer-presence-away {
+  background-color: yellow;
+}
+.layer-presence-busy {
+  background-color: red;
+}
+.layer-presence-available {
+  background-color: green;
+}
+.layer-presence-offline {
+  background-color: grey;
+}
+.layer-presence-invisible {
+  background-color: purple;
+}
+
+.avatar-image .layer-presence {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  border: solid 2px white;
+}
+
+.layer-presence-hidden, .message-list .layer-presence {
+  display: none;
 }

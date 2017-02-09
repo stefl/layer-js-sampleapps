@@ -7,8 +7,10 @@ import {
   CHANGE_COMPOSER_MESSAGE,
   ROUTER_DID_CHANGE,
   DELETE_CONVERSATION,
+  TOGGLE_PRESENCE,
   clientReady,
-  selectConversation
+  selectConversation,
+  ownerSet,
 } from '../actions/messenger';
 
 const {
@@ -90,6 +92,14 @@ function handleAction(layerClient, typingPublisher, state, action, next) {
         conversation.delete(layer.Constants.DELETION_MODE.ALL);
       }
       return;
+
+    case TOGGLE_PRESENCE:
+      if (layerClient.user.presence.status === layer.Identity.STATUS.BUSY) {
+        layerClient.user.setStatus(layer.Identity.STATUS.AVAILABLE);
+      } else {
+        layerClient.user.setStatus(layer.Identity.STATUS.BUSY);
+      }
+      return;
     default:
       return;
   }
@@ -100,7 +110,12 @@ const layerMiddleware = layerClient => store => {
   const typingPublisher = layerClient.createTypingPublisher();
 
   layerClient.on('ready', () => {
+    store.dispatch(ownerSet(layerClient.user.toObject()));
     store.dispatch(clientReady());
+  });
+
+  layerClient.user.on('identities:change', function(evt) {
+    store.dispatch(ownerSet(layerClient.user.toObject()));
   });
 
   return next => action => {

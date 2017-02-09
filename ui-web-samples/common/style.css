@@ -374,3 +374,7 @@ layer-conversation-panel {
   margin-top: -200px;
   opacity: 0.1;
 }
+
+layer-presence {
+  margin-right: 10px;
+}

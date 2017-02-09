@@ -6,13 +6,13 @@ var Backbone = require('backbone');
 // typically you would want to provide a value here; this sample lets you change appIds, so
 // appId is set on each individual widget instead
 window.layerUI.init({
-  layer: window.layer,
   appId: ''
 });
 var LayerUIWidgets = window.layerUI.adapters.backbone(Backbone);
 var NotifierView = LayerUIWidgets.Notifier;
 var ConversationsListView = LayerUIWidgets.ConversationsList;
 var ConversationView = LayerUIWidgets.ConversationPanel;
+var PresenceView = LayerUIWidgets.Presence;
 var TitlebarView = require('./views/titlebar');
 var ParticipantsView = require('./views/participants-dialog');
 var AnnouncementsView = require('./views/announcements');
@@ -33,6 +33,16 @@ var router = new Router();
  */
 module.exports = function(client) {
   var activeConversationId = null;
+  var presenceView = new PresenceView(client, {
+    item: client.user,
+    onPresenceClick: function(evt) {
+      if (client.user.presence.status === layer.Identity.STATUS.BUSY) {
+        client.user.setStatus(layer.Identity.STATUS.AVAILABLE);
+      } else {
+        client.user.setStatus(layer.Identity.STATUS.BUSY);
+      }
+    }
+  });
   var notifierView = new NotifierView(client, {
     // Use toast notifications when in the foreground (rather than `none` or `desktop` for Desktop Notifications
     notifyInForeground: 'toast',
@@ -40,21 +50,21 @@ module.exports = function(client) {
     // If we are in the foreground, and the message is in the currently selected Conversation,
     // prevent the toast notification.
     onMessageNotification: function(evt) {
-      if (evt.detail.message.conversationId === conversationView.conversationId && !evt.detail.isBackground) {
+      if (evt.detail.item.conversationId === conversationView.conversationId && !evt.detail.isBackground) {
         evt.preventDefault();
       }
     },
 
     // On clicking on the notification, open the Conversation
     onNotificationClick: function(evt) {
-      var message = evt.detail.message;
+      var message = evt.detail.item;
       location.hash = message.conversationId.replace(/^layer:\/\/\//, '');
     }
   });
 
   var conversationsListView = new ConversationsListView(client, {
     onConversationSelected: function(evt) {
-      location.hash = evt.detail.conversation.id.replace(/^layer:\/\/\//, '');
+      location.hash = evt.detail.item.id.replace(/^layer:\/\/\//, '');
     }
   });
 

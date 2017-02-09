@@ -4,7 +4,10 @@
     </div>
     <div class='participant-list'>
       <div class="participant-item" ng-repeat="user in appCtrlState.users track by user.id">
-        <div class="avatar-image"><img src="{{user.avatarUrl}}" /></div>
+        <div class="avatar-image">
+          <div class="{{'layer-presence layer-presence-' + user.presence.status.toLowerCase()}}"></div>
+          <img src="{{user.avatarUrl}}" />
+        </div>
         <label for="{{'participant-checkbox-' + user.id}}">{{user.displayName}}</label>
         <input value={{user.userId}}
               id="{{'participant-checkbox-' + user.id}}"

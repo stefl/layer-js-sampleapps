@@ -21,6 +21,7 @@ export const DELETE_CONVERSATION = 'DELETE_CONVERSATION';
 export const SHOW_ANNOUNCEMENTS = 'SHOW_ANNOUNCEMENTS';
 export const HIDE_ANNOUNCEMENTS = 'HIDE_ANNOUNCEMENTS';
 export const OWNER_SET = 'OWNER_SET';
+export const TOGGLE_PRESENCE = 'TOGGLE_PRESENCE';
 
 export function ownerSet(owner) {
   return {
@@ -168,3 +169,10 @@ export function hideAnnouncements() {
     type: HIDE_ANNOUNCEMENTS
   };
 }
+
+export function togglePresence() {
+  return {
+    type: TOGGLE_PRESENCE
+  };
+}
+

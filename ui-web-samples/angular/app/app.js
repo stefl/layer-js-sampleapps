@@ -4,8 +4,7 @@
 // typically you would want to provide a value here; this sample lets you change appIds, so
 // appId is set on each individual widget instead
 window.layerUI.init({
-  appId: "",
-  layer: window.layer
+  appId: ""
 });
 
 // Define the "layerUIControllers" controller

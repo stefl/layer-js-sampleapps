@@ -21,12 +21,23 @@ export default class ConversationListHeader extends Component {
     this.props.onShowAnnouncements();
   }
 
+
+  /**
+   * Toggle presence between BUSY and AVAILABLE
+   */
+  togglePresence = (event) => {
+    event.preventDefault();
+    this.props.onTogglePresence();
+  }
+
+
   render() {
     const { unreadAnnouncements, owner } = this.props;
     const announcementClasses = ['announcements-button'];
     if (unreadAnnouncements) announcementClasses.push('unread-announcements');
     return (
       <div className='panel-header conversations-header'>
+        <div className={'layer-presence layer-presence-' + owner.presence.status.toLowerCase()} onClick={this.togglePresence}></div>
         <div className='title'>{owner.displayName}'s Conversations</div>
         <a className={announcementClasses.join(' ')} onClick={this.showAnnouncements}>
           <i className="icon fa fa-bullhorn"></i>
