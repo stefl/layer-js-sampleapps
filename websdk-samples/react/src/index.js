@@ -47,11 +47,6 @@ window.addEventListener('message', function(evt) {
   client.connect(window.layerSample.userId);
 
   /**
-   * Start authentication
-   */
-  client.connect(window.layerSample.userId);
-
-  /**
    * Share the client with the middleware layer
    */
   const store = configureStore(client);
