@@ -11,7 +11,7 @@
     "history": "^1.12.3",
     "layer-react": "^0.1.2",
     "layer-ui-web": "^0.9.0",
-    "layer-websdk": "^3.0.0",
+    "layer-websdk": "3.1.1",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
     "react-redux": "^2.1.2",
