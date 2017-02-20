@@ -10,7 +10,7 @@
     "classnames": "^2.1.5",
     "history": "^1.12.3",
     "layer-react": "^0.1.2",
-    "layer-ui-web": "^0.9.12",
+    "layer-ui-web": "^1.0.0",
     "layer-websdk": "^3.2.0",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
