@@ -1,10 +1,9 @@
 /* global angular */
 'use strict';
 
-// typically you would want to provide a value here; this sample lets you change appIds, so
-// appId is set on each individual widget instead
+// initialize lauerUI with your appID and layer sdk
 window.layerUI.init({
-  appId: "",
+  appId: window.layerSample.appId,
   layer: window.layer
 });
 

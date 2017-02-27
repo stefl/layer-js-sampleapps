@@ -115,9 +115,6 @@ module.exports = function(client) {
     Backbone.$('.announcements-button').toggleClass('unread-announcements', unread.length > 0);
   });
   identityQuery.on('change', function(evt) {
-    if (evt.type === 'data') {
-      window.layerSample.validateSetup(client);
-    }
     participantsView.users = identityQuery.data;
     participantsView.render();
   });

@@ -34,6 +34,7 @@ module.exports = Backbone.View.extend({
       participants.push(input.value);
     });
     this.trigger('conversation:create', participants);
+    this.hide();
   },
   events: {
     'click .participant-list-container': 'clickStopPropagation',

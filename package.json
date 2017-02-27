@@ -1,0 +1,12 @@
+{
+  "name": "layer-js-sampleapps",
+  "version": "0.1.0",
+  "description": "Sample apps using Layer SDK",
+  "scripts": {
+    "setup": "node ./setup.js"
+  },
+  "dependencies": {
+    "request": "^2.79.0"
+  },
+  "devDependencies": {}
+}

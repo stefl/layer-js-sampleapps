@@ -8,84 +8,71 @@ var sampleControllers = angular.module('sampleAppControllers', []);
  * to return Conversation and Message Objects or Instances.  An Object
  * lets us have an immutable object that simplifies angular's scope comparisons.
  * An Instance provides methods that let us interact with the layer services.
- * Both are used in this application: Objects for managing angular state, Instances for interacting.
+ * Both are used in this application: Objects for managing angular state,
+ * Instances for interacting.
  */
-
-var identityReady;
-
-/**
- * Wait for identity dialog message to complete
- */
-window.addEventListener('message', function(evt) {
-  if (evt.data === 'layer:identity') {
-    identityReady();
-  }
-});
 
 /**
  * The Main Application Controller initializes the client
  * and loads the Chat Controller
  */
 sampleControllers.controller('appCtrl', function ($scope) {
+
+  var appId = window.layerSample.appId;
   $scope.appCtrlState = {
     isReady: false,
-    client: null
+    client: new layer.Client({
+      appId: appId
+    })
   };
 
   /**
-   * Start by creating a client; it will authenticate asynchronously,
-   * so the UI needs to account for the fact that it won't have any data
-   * when first rendering.
+   * Client authentication challenge.
+   * Sign in to Layer sample identity provider service.
    */
-  identityReady = function() {
+  $scope.appCtrlState.client.on('challenge', function(evt) {
+    window.layerSample.getIdentityToken(appId, evt.nonce, evt.callback);
+  });
 
+  /**
+   * Once the client is ready, get our users (static data
+   * for this sample) and render.
+   */
+  $scope.appCtrlState.client.on('ready', function() {
+    $scope.appCtrlState.users = [];
+    $scope.appCtrlState.user = window.layerSample.user;
+  });
+
+  /**
+   * validate that the sample data has been properly set up
+   */
+  window.layerSample.validateSetup($scope.appCtrlState.client);
+
+  // Create the User List query
+  var identityQuery = $scope.appCtrlState.client.createQuery({
+    model: layer.Query.Identity,
+    dataType: 'object',
+    paginationWindow: 500,
+    change: function(evt) {
+      // This query won't run until the client "ready" event has triggered;
+      // and the query's "change" event won't trigger until it runs.
+      // While it is not required to wait, we wait until Identities have loaded before we
+      // start rendering the UI
+
+      $scope.appCtrlState.isReady = true;
+      $scope.appCtrlState.users = identityQuery.data.filter(function(user) {
+        return user.id !== $scope.appCtrlState.client.user.id;
+      });
+      $scope.$digest();
+    }
+  });
+
+  window.layerSample.onUserSelection(function(userId) {
     /**
-     * Initialize Layer Client with `appId`
+     * Start authentication
      */
-    $scope.appCtrlState.client = new layer.Client({
-      appId: window.layerSample.appId
-    });
-
-    /**
-     * Client authentication challenge.
-     * Sign in to Layer sample identity provider service.
-     */
-    $scope.appCtrlState.client.on('challenge', function(evt) {
-      window.layerSample.challenge(evt.nonce, evt.callback);
-    });
-
-    /**
-     * Once the client is ready, get our users (static data
-     * for this sample) and render.
-     */
-    $scope.appCtrlState.client.on('ready', function() {
-      $scope.appCtrlState.users = [];
-      $scope.appCtrlState.user = window.layerSample.user;
-    });
-
-    // Create the User List query
-    var identityQuery = $scope.appCtrlState.client.createQuery({
-      model: layer.Query.Identity,
-      dataType: 'object',
-      paginationWindow: 500,
-      change: function(evt) {
-        // This query won't run until the client "ready" event has triggered;
-        // and the query's "change" event won't trigger until it runs.
-        // While it is not required to wait, we wait until Identities have loaded before we
-        // start rendering the UI
-        $scope.appCtrlState.isReady = true;
-        $scope.appCtrlState.users = identityQuery.data.filter(function(user) {
-          return user.id !== $scope.appCtrlState.client.user.id;
-        });
-        $scope.$digest();
-        if (evt.type === 'data') {
-          window.layerSample.validateSetup($scope.appCtrlState.client);
-        }
-      }
-    });
-
-    $scope.appCtrlState.client.connect(window.layerSample.userId);
-  };
+    $scope.appCtrlState.client.connect(userId);
+  });
 });
 
 /**
@@ -168,4 +155,3 @@ sampleControllers.controller('chatCtrl', function ($scope, $route, $location) {
     return '';
   };
 });
-

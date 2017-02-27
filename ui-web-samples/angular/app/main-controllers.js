@@ -2,7 +2,6 @@
 'use strict';
 
 var sampleControllers = angular.module('sampleAppControllers', []);
-var identityReady;
 
 /**
  * Notes: data in this application is driven by Queries.  Queries can be set
@@ -14,77 +13,49 @@ var identityReady;
  */
 
 /**
- * Wait for the user to specify who they are before we procede
- */
-window.addEventListener('message', function(evt) {
-  if (evt.data === 'layer:identity') {
-    identityReady();
-  }
-});
-
-/**
  * The Main Application Controller initializes the client
  * and loads the Chat Controller
  */
 sampleControllers.controller('appCtrl', function ($scope) {
 
+  var appId = window.layerSample.appId;
   $scope.appCtrlState = {
     isReady: false,
-    client: null
+    client: new layer.Client({
+      appId: appId
+    })
   };
 
   /**
-   * Start by creating a client; it will authenticate asynchronously,
-   * so the UI needs to account for the fact that it won't have any data
-   * when first rendering.
+   * Client authentication challenge.
+   * Sign in to Layer sample identity provider service.
    */
-  identityReady = function() {
+  $scope.appCtrlState.client.on('challenge', function(evt) {
+    window.layerSample.getIdentityToken(appId, evt.nonce, evt.callback);
+  });
 
+  /**
+   * Once the client is ready, get our users (static data
+   * for this sample) and render.
+   */
+  $scope.appCtrlState.client.on('ready', function() {
+    $scope.appCtrlState.isReady = true;
+
+    // Any changes to the query, update our rendering
+    $scope.$apply();
+  });
+
+  /**
+   * validate that the sample data has been properly set up
+   */
+  window.layerSample.validateSetup($scope.appCtrlState.client);
+
+  window.layerSample.onUserSelection(function(userId) {
     /**
-     * Initialize Layer Client with `appId`
+     * Start authentication
      */
-    $scope.appCtrlState.client = new layer.Client({
-      appId: window.layerSample.appId
-    });
-
-    /**
-     * Client authentication challenge.
-     * Sign in to Layer sample identity provider service.
-     */
-    $scope.appCtrlState.client.on('challenge', function(evt) {
-      window.layerSample.challenge(evt.nonce, evt.callback);
-    });
-
-    /**
-     * Once the client is ready, get our users (static data
-     * for this sample) and render.
-     */
-    $scope.appCtrlState.client.on('ready', function() {
-      $scope.appCtrlState.isReady = true;
-    });
-
-    // Create the User List query; this query will automatically wait to fire
-    // until after the client has finished authenticating.
-    // Note that this is used Solely for validating your account is setup, and would not
-    // typically be in an app.  This is NOT used for generating an Identity List.
-    // <layer-identities-list /> generates that Query for you.
-    $scope.identityQuery = $scope.appCtrlState.client.createQuery({
-      model: layer.Query.Identity,
-      dataType: 'object',
-      paginationWindow: 500,
-      change: function(evt) {
-
-        // Any changes to the query, update our rendering
-        $scope.$apply();
-        if (evt.type === 'data') {
-          window.layerSample.validateSetup($scope.appCtrlState.client);
-        }
-      }
-    });
-
-    // Start the authentication process
-    $scope.appCtrlState.client.connect(window.layerSample.userId);
-  };
+    $scope.appCtrlState.client.connect(userId);
+  });
 });
 
 /**
@@ -193,4 +164,3 @@ sampleControllers.controller('chatCtrl', function ($scope, $location) {
     $scope.$apply();
   };
 });
-
