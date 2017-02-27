@@ -21,7 +21,7 @@ controllers.controller('participantsDialogCtrl', function($scope) {
       });
     return result;
   }
-
+  
   /**
    * On typing a message and hitting ENTER, the send method is called.
    * $scope.chatCtrlState.currentConversation is a basic object; we use it to get the

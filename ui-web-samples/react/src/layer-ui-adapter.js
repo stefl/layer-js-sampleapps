@@ -3,10 +3,9 @@ import ReactDom from 'react-dom';
 import * as Layer from 'layer-websdk';
 import * as LayerUI from 'layer-ui-web';
 
-// Typically you'd provide an appId here, but since this app lets you change appIds,
-// we will instead have to pass app-ids in as attributes into the webcomponents
+// initialize lauerUI with your appID and layer sdk
 LayerUI.init({
-  appId: ''
+  appId: window.layerSample.appId,
 });
 
 const LayerUIWidgets = LayerUI.adapters.react(React, ReactDom);

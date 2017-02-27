@@ -3,10 +3,9 @@
 
 var Backbone = require('backbone');
 
-// typically you would want to provide a value here; this sample lets you change appIds, so
-// appId is set on each individual widget instead
+// initialize lauerUI with your appID and layer sdk
 window.layerUI.init({
-  appId: ''
+  appId: window.layerSample.appId
 });
 var LayerUIWidgets = window.layerUI.adapters.backbone(Backbone);
 var NotifierView = LayerUIWidgets.Notifier;
@@ -106,20 +105,6 @@ module.exports = function(client) {
       return !item.isRead;
     });
     Backbone.$('.announcements-button').toggleClass('unread-announcements', unread.length > 0);
-  });
-
-   /**
-   * Create Identity List Query; this is solely for validating
-   * that the app is setup right, and is not actually used for this UI.
-   */
-  var identityQuery = client.createQuery({
-    model: layer.Query.Identity
-  });
-
-  identityQuery.on('change', function(evt) {
-    if (evt.type === 'data') {
-      window.layerSample.validateSetup(client);
-    }
   });
 
 

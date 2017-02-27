@@ -7,41 +7,41 @@ Backbone.$ = $;
 
 var controller = require('./controller');
 
+let appId = window.layerSample.appId;
+
 /**
- * Wait for identity dialog message to complete
+ * Initialize Layer Client with `appId`.
  */
-window.addEventListener('message', function(evt) {
-  if (evt.data !== 'layer:identity') return;
+var client = new layer.Client({
+  appId: appId
+});
 
-  /**
-   * Initialize Layer Client with `appId`.
-   */
-  var client = new layer.Client({
-    appId: window.layerSample.appId
-  });
+/**
+ * Client authentication challenge.
+ * Sign in to Layer sample identity provider service.
+ *
+ * See http://static.layer.com/sdk/docs/#!/api/layer.Client
+ */
+client.once('challenge', function(e) {
+  window.layerSample.getIdentityToken(appId, e.nonce, e.callback);
+});
 
-  /**
-   * Client authentication challenge.
-   * Sign in to Layer sample identity provider service.
-   *
-   * See http://static.layer.com/sdk/docs/#!/api/layer.Client
-   */
-  client.once('challenge', function(e) {
-    window.layerSample.challenge(e.nonce, e.callback);
-  });
-
+window.layerSample.onUserSelection((userId) => {
   /**
    * Start authentication
    */
-  client.connect(window.layerSample.userId);
+  client.connect(userId);
+});
 
-  /**
-   * Client ready. Initialize controller.
-   */
-  client.once('ready', function() {
-    $('.left-panel .panel-header .title').text(client.user.displayName + '\'s Conversations');
-    controller(client);
-  });
+/**
+ * validate that the sample data has been properly set up
+ */
+window.layerSample.validateSetup(client);
 
-  // Set conversations title
-}, false);
+/**
+ * Client ready. Initialize controller.
+ */
+client.once('ready', function() {
+  $('.left-panel .panel-header .title').text(client.user.displayName + '\'s Conversations');
+  controller(client);
+});

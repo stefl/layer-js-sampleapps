@@ -2,6 +2,26 @@
 
 This repository contains sample chat applications that demonstrate different ways of building a Web Application with Layer.  Sample apps are built using Backbone, Angular and React; each app is built once with the Layer WebSDK, and once with the Layer WebSDK + Layer UI for Web (Layer UI Framework).
 
+## Setup
+
+Before you install and run any of the sample apps provided in this repo, you will need to prepare the apps by configuring your appID and ensure that your application has been setup with some demo data. To perform the setup you will need to know your Application ID and Token:
+
+* `YOUR_APP_ID` is in the `Keys` section of the Developer Dashboard
+* `YOUR_TOKEN` is in the `Integration` section of the Developer Dashbaord
+
+Run the following commands from within the root of the repo:
+
+```
+npm install
+npm run setup YOUR_TOKEN YOUR_APP_ID
+```
+
+> Notes:
+>
+> 1. Your app may already be set up with the sample users, and if so the above script will tell you that the sample users already exist.
+> 2. You will still need run `npm install` and `npm start` for each of the sample app folders included in this repository.
+
+
 ## The Web SDK
 
 These sample apps are built using the [Layer WebSDK](https://docs.layer.com/sdk/web/introduction).  These samples support two message types:
@@ -32,10 +52,8 @@ The [Backbone App](./websdk-samples/backbone) uses:
 
 ## Layer UI for Web
 
-[Layer UI for Web](http://static.layer.com/layer-ui-web-beta/docs/) is an Early Beta release of a library of Webcomponent widgets for rendering Layer data and events.
-To simplify use of these widgets  from various frameworks, the library  ships with Adapters to provision its widgets in a manner friendlier to other frameworks.  Examples and initialization code for these is shown below.
-
-Note that all calls to `LayerUI.init()` take a recommended `appId` as input; these samples don't follow this recommended practice because the `appId` is not know at load time, and must be entered by the user of the sample app.  Instead `appId` is provided directly to each Web Component.
+[Layer UI for Web](http://static.layer.com/layer-ui-web-beta/docs/) is a library of Webcomponent widgets for rendering Layer data and events.
+To simplify use of these widgets from various frameworks, the library ships with Adapters to provision its widgets in a manner friendlier to other frameworks.  Examples and initialization code for these is shown below.
 
 Out of the box, this library provides the sample apps with support for:
 
@@ -47,14 +65,13 @@ Out of the box, this library provides the sample apps with support for:
 
 ### React with Layer UI
 
-The [React App](./ui-web-samples/react) uses a single `src/layer-ui-adapters.js` file, which is imported by any Component that needs React Views created from the Webcomponent widgets.  This file can be included from anywhere/everywhere that you need to insure you have an initialized UI library
+The [React App](./ui-web-samples/react) uses a single `src/layer-ui-adapters.js` file, which is imported by any Component needing React Views created from the Webcomponent widgets.  This file can be included from anywhere/everywhere requiring an initialized UI library
 and initialized React Components.  This is a useful pattern for many apps:
 
 ```javascript
 import * as Layer from 'layer-websdk';
 LayerUI.init({
-  appId: 'layer:///apps/staging/my-app-id',
-  layer: Layer
+  appId: 'layer:///apps/staging/my-app-id'
 });
 
 const LayerUIWidgets = LayerUI.adapters.react(React, ReactDom);
@@ -69,16 +86,14 @@ The [Angular App](./ui-web-samples/angular) uses the Layer UI Angular adapter to
 
 ```javascript
 window.layerUI.init({
-  appId: 'layer:///apps/staging/my-app-id',
-  layer: window.layer
+  appId: 'layer:///apps/staging/my-app-id'
 });
 
 // Define the "layerUIControllers" controller
 window.layerUI.adapters.angular(angular);
 
-
 var app = angular.module('ChatApp', [
-      "layerUIControllers", ...
+  "layerUIControllers", ...
 ]);
 ```
 
@@ -101,8 +116,7 @@ The [Backbone App](./ui-web-samples/backbone) uses the Layer UI Backbone adapter
 
 ```javascript
 window.layerUI.init({
-  appId: 'layer:///apps/staging/my-app-id',
-  layer: window.layer
+  appId: 'layer:///apps/staging/my-app-id'
 });
 var LayerUIWidgets = window.layerUI.adapters.backbone(Backbone);
 var NotifierView = LayerUIWidgets.Notifier;
@@ -110,7 +124,7 @@ var ConversationsListView = LayerUIWidgets.ConversationList;
 var ConversationView = LayerUIWidgets.Conversation;
 ```
 
-After initializing the UI Framework, generate the Backbone views so that they can be instantiated and used.
+After initializing the UI Framework, the adatpor generates the Backbone views so that they can be instantiated and used.
 
 
 ## Authentication
@@ -120,58 +134,3 @@ For demonstration purposes Layer provides a sample authentication endpoint which
 Layer Staging Application IDs can be found in your [Developer Dashboard](https://developer.layer.com/projects/keys).
 
 > In real application this should be replaced with your own authentication mechanism and manage your own user identities.
-
-
-## Sample Users
-
-Sample Users should have been setup for you automatically.  If your app does NOT have users setup for you already, you will see an alert when running the application, and you can use the following commands to setup your app with the correct Identities.  You can find YOUR_APP_ID in the `Keys` section of the Developer Dashboard; you can find YOUR_TOKEN in the `Integration` section of the Developer Dashbaord.
-
-```
-curl  -X POST \
-      -H 'Accept: application/vnd.layer+json; version=1.1' \
-      -H 'Authorization: Bearer YOUR_TOKEN' \
-      -H 'Content-Type: application/json' \
-      -d '{"display_name": "User 0", "avatar_url": "https://s3.amazonaws.com/static.layer.com/sdk/sampleavatars/0.png"}' \
-      https://api.layer.com/apps/YOUR_APP_ID/users/0/identity
-
-curl  -X POST \
-      -H 'Accept: application/vnd.layer+json; version=1.1' \
-      -H 'Authorization: Bearer YOUR_TOKEN' \
-      -H 'Content-Type: application/json' \
-      -d '{"display_name": "User 1", "avatar_url": "https://s3.amazonaws.com/static.layer.com/sdk/sampleavatars/1.png"}' \
-      https://api.layer.com/apps/YOUR_APP_ID/users/1/identity
-
-curl  -X POST \
-      -H 'Accept: application/vnd.layer+json; version=1.1' \
-      -H 'Authorization: Bearer YOUR_TOKEN' \
-      -H 'Content-Type: application/json' \
-      -d '{"display_name": "User 2", "avatar_url": "https://s3.amazonaws.com/static.layer.com/sdk/sampleavatars/2.png"}' \
-      https://api.layer.com/apps/YOUR_APP_ID/users/2/identity
-
-curl  -X POST \
-      -H 'Accept: application/vnd.layer+json; version=1.1' \
-      -H 'Authorization: Bearer YOUR_TOKEN' \
-      -H 'Content-Type: application/json' \
-      -d '{"display_name": "User 3", "avatar_url": "https://s3.amazonaws.com/static.layer.com/sdk/sampleavatars/3.png"}' \
-      https://api.layer.com/apps/YOUR_APP_ID/users/3/identity
-
-curl  -X POST \
-      -H 'Accept: application/vnd.layer+json; version=1.1' \
-      -H 'Authorization: Bearer YOUR_TOKEN' \
-      -H 'Content-Type: application/json' \
-      -d '{"display_name": "User 4", "avatar_url": "https://s3.amazonaws.com/static.layer.com/sdk/sampleavatars/4.png"}' \
-      https://api.layer.com/apps/YOUR_APP_ID/users/4/identity
-
-curl  -X POST \
-      -H 'Accept: application/vnd.layer+json; version=1.1' \
-      -H 'Authorization: Bearer YOUR_TOKEN' \
-      -H 'Content-Type: application/json' \
-      -d '{"display_name": "User 5", "avatar_url": "https://s3.amazonaws.com/static.layer.com/sdk/sampleavatars/5.png"}' \
-      https://api.layer.com/apps/YOUR_APP_ID/users/5/identity
-
-curl  -X POST \
-      -H 'Accept: application/vnd.layer+json; version=1.1' \
-      -H 'Authorization: Bearer YOUR_TOKEN' \
-      -H 'Content-Type: application/json' \
-      -d '{"distinct": false, "participants": ["0","1","2","3","4","5"]}' \
-      https://api.layer.com/apps/YOUR_APP_ID/conversations
