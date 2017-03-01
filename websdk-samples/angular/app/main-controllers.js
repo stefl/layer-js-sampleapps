@@ -31,7 +31,7 @@ sampleControllers.controller('appCtrl', function ($scope) {
    * Sign in to Layer sample identity provider service.
    */
   $scope.appCtrlState.client.on('challenge', function(evt) {
-    window.layerSample.getIdentityToken(appId, evt.nonce, evt.callback);
+    window.layerSample.getIdentityToken(evt.nonce, evt.callback);
   });
 
   /**
@@ -67,11 +67,11 @@ sampleControllers.controller('appCtrl', function ($scope) {
     }
   });
 
-  window.layerSample.onUserSelection(function(userId) {
+  window.layerSample.onLogin(function() {
     /**
      * Start authentication
      */
-    $scope.appCtrlState.client.connect(userId);
+    $scope.appCtrlState.client.connect();
   });
 });
 

@@ -20,15 +20,15 @@ let client = new Layer.Client({
  * Sign in to Layer sample identity provider service.
  */
 client.once('challenge', e => {
-  window.layerSample.getIdentityToken(appId, e.nonce, e.callback);
+  window.layerSample.getIdentityToken(e.nonce, e.callback);
 });
 
-console.log('listening for onUserSelection');
-window.layerSample.onUserSelection((userId) => {
+console.log('listening for onLogin');
+window.layerSample.onLogin(() => {
   /**
    * Start authentication
    */
-  client.connect(userId);
+  client.connect();
 });
 
 /**
