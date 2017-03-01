@@ -4,22 +4,9 @@ This repository contains sample chat applications that demonstrate different way
 
 ## Setup
 
-Before you install and run any of the sample apps provided in this repo, you will need to prepare the apps by configuring your appID and ensure that your application has been setup with some demo data. To perform the setup you will need to know your Application ID and Token:
+Before you install and run any of the sample apps provided in this repo, you will need to prepare the apps by configuring your appID and Identity Provider (authenticator).
 
-* `YOUR_APP_ID` is in the `Keys` section of the Developer Dashboard
-* `YOUR_TOKEN` is in the `Integration` section of the Developer Dashbaord
-
-Run the following commands from within the root of the repo:
-
-```
-npm install
-npm run setup YOUR_TOKEN YOUR_APP_ID
-```
-
-> Notes:
->
-> 1. Your app may already be set up with the sample users, and if so the above script will tell you that the sample users already exist.
-> 2. You will still need run `npm install` and `npm start` for each of the sample app folders included in this repository.
+**INSTRUCTIONS FOR THIS SECTION ARE WAITING FOR DASHBOARD**
 
 
 ## The Web SDK
@@ -126,11 +113,3 @@ var ConversationView = LayerUIWidgets.Conversation;
 
 After initializing the UI Framework, the adatpor generates the Backbone views so that they can be instantiated and used.
 
-
-## Authentication
-
-For demonstration purposes Layer provides a sample authentication endpoint which works for Layer **Staging Applications only**. It exposes a global `window.layerSample` utility and injects an initial HTML login dialog.
-
-Layer Staging Application IDs can be found in your [Developer Dashboard](https://developer.layer.com/projects/keys).
-
-> In real application this should be replaced with your own authentication mechanism and manage your own user identities.

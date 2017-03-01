@@ -22,18 +22,18 @@ let client = new Client({
  * See http://static.layer.com/sdk/docs/#!/api/layer.Client-event-challenge
  */
 client.once('challenge', e => {
-  window.layerSample.getIdentityToken(appId, e.nonce, e.callback);
+  window.layerSample.getIdentityToken(e.nonce, e.callback);
 });
 
 client.on('ready', () => {
   store.dispatch(ownerSet(client.user.toObject()));
 });
 
-window.layerSample.onUserSelection((userId) => {
+window.layerSample.onLogin(() => {
   /**
    * Start authentication
    */
-  client.connect(userId);
+  client.connect();
 });
 
 /**

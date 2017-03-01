@@ -3,8 +3,7 @@
 
 // initialize lauerUI with your appID and layer sdk
 window.layerUI.init({
-  appId: window.layerSample.appId,
-  layer: window.layer
+  appId: window.layerSample.appId
 });
 
 // Define the "layerUIControllers" controller
