@@ -7,7 +7,7 @@
   request.onload = function() {
     config = JSON.parse(this.responseText);
   };
-  request.open('GET', 'common/config.json', false);
+  request.open('GET', 'common/LayerConfiguration.json', false);
   request.send();
 
   /**
