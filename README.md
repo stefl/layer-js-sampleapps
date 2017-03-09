@@ -4,10 +4,27 @@ This repository contains sample chat applications that demonstrate different way
 
 ## Setup
 
-Before you install and run any of the sample apps provided in this repo, you will need to prepare the apps by configuring your appID and Identity Provider (authenticator).
+Before you install and run any of the sample apps provided in this repo, you will need to prepare the apps by configuring your Layer appID and Identity Provider (authenticator) server.
 
-**INSTRUCTIONS FOR THIS SECTION ARE WAITING FOR DASHBOARD**
+Make sure [common/LayerConfiguration.json](./common/LayerConfiguration.json) file if configured properly.
 
+## Demo
+
+This is a simple example on how one would use the Layer Web SDK using [AngularJS](https://angularjs.org/) framework.
+
+### Install
+
+To install all dependencies use the following command:
+
+    npm install
+
+### Running
+
+To run this project use the following command:
+
+    npm start
+
+Point your browser to: [localhost:8080](http://localhost:8080)
 
 ## The Web SDK
 
@@ -112,4 +129,3 @@ var ConversationView = LayerUIWidgets.Conversation;
 ```
 
 After initializing the UI Framework, the adatpor generates the Backbone views so that they can be instantiated and used.
-

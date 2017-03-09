@@ -1,12 +1,11 @@
 {
   "name": "layer-js-sampleapps",
   "version": "0.1.0",
-  "description": "Sample apps using Layer SDK",
+  "description": "Chat UI example using Layer SDK and Angularjs",
   "scripts": {
-    "setup": "node ./setup.js"
+    "start": "http-server -a localhost"
   },
   "dependencies": {
-    "request": "^2.79.0"
-  },
-  "devDependencies": {}
+    "http-server": "~0.9.0"
+  }
 }
