@@ -190,6 +190,9 @@ var ConversationView = LayerUIWidgets.Conversation;
 
 After initializing the UI Framework, the adatpor generates the Backbone views so that they can be instantiated and used.
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> Sample app built on new Identity Services
+=======
+>>>>>>> Folder restructure for Instastart demo
