@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
 
-  <title>Layer Angular example</title>
-  <meta name="description" content="Layer Angular example">
+  <title>Layer Chat - Angular example</title>
+  <meta name="description" content="Layer Chat - Angular example">
 
   <link rel="shortcut icon" href="http://static.layer.com/web/favicon.png">
 
@@ -17,26 +17,23 @@
   <link href="common/login_style.css" rel="stylesheet">
   <script src="common/identityServices.js"></script>
 
-
   <!-- Layer Web SDK + UI -->
   <script src='https://cdn.layer.com/sdk/3.2/layer-websdk.min.js'></script>
   <script src='https://cdn.layer.com/ui/1.0/layer-ui-web.min.js'></script>
-  <link  href='https://cdn.layer.com/ui/1.0/themes/groups-basic.css' rel='stylesheet' />
+  <link href='https://cdn.layer.com/ui/1.0/themes/bubbles-basic.css' rel='stylesheet' />
 
   <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.js'></script>
   <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.js'></script>
 
   <!-- Angular app -->
-  <script src='app/app.js'></script>
-  <script src='app/main-controllers.js'></script>
-  <script src='app/announcement-list-controllers.js'></script>
-  <script src='app/conversation-panel-controllers.js'></script>
-  <script src='app/participant-dialog-controllers.js'></script>
-
-  <link rel="import" href="groups-basic-templates.html">
+  <script src='src/app/app.js'></script>
+  <script src='src/app/main-controllers.js'></script>
+  <script src='src/app/announcement-list-controllers.js'></script>
+  <script src='src/app/conversation-panel-controllers.js'></script>
+  <script src='src/app/participant-dialog-controllers.js'></script>
 </head>
 <body ng-controller="appCtrl">
-    <div class="main-app" ng-include="'partials/app.html'"
+    <div class="main-app" ng-include="'src/partials/app.html'"
          ng-if="appCtrlState.isReady"></div>
 </body>
 </html>
