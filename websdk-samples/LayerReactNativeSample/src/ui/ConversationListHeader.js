@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 255, 255, 0.5)',
     borderWidth: 1,
     padding: 5,
-    borderRadius: 4
+    borderRadius: 4,
+    marginLeft: 5
   },
   announcementButtonUnread: {
 

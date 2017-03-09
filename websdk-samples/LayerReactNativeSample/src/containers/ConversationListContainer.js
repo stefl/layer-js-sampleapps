@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 
 import {
   View,
+  Modal,
   StyleSheet
 } from 'react-native';
 
@@ -12,6 +13,7 @@ import { connectQuery } from 'layer-react';
 import * as MessengerActions from '../actions/messenger';
 import ConversationList from '../ui/ConversationList';
 import ConversationListHeader from '../ui/ConversationListHeader';
+import AnnouncementsList from '../ui/announcements/MessageList';
 
 /**
  * Copy data from reducers into our properties
@@ -82,42 +84,6 @@ export default class ConversationListContainer extends Component {
       hideParticipants();
     // }
   }
-
-  // handleConversationSelected(conversationID) {
-  //   console.log('handleConversationSelected', conversationID);
-  //   this.props.navigator.push({
-  //     name: 'ActiveConversation',
-  //     conversationID: conversationID
-  //   })
-  //   this.props.actions.selectConversation(conversationID);
-  // }
-
-  /**
-   * Render the left panel with the Conversation List and List Header
-   */
-  // renderLeftPanel() {
-  //   const {
-  //     owner,
-  //     conversations,
-  //     announcements,
-  //     activeConversationId,
-  //     actions
-  //   } = this.props;
-  //
-  //   return (
-  //     <div className='left-panel'>
-  //       <ConversationListHeader
-  //         owner={owner}
-  //         unreadAnnouncements={Boolean(announcements.filter(item => item.isUnread).length)}
-  //         onShowAnnouncements={actions.showAnnouncements}
-  //         onShowParticipants={actions.showParticipants}/>
-  //       <ConversationList
-  //         conversations={conversations}
-  //         activeConversationId={activeConversationId}
-  //         onDeleteConversation={actions.deleteConversation}/>
-  //     </div>
-  //   );
-  // }
 
   /**
    * Render the Announcements dialog.
@@ -198,7 +164,9 @@ export default class ConversationListContainer extends Component {
       conversations,
       announcements,
       activeConversationId,
-      actions
+      actions,
+      showAnnouncements,
+      showParticipants
     } = this.props;
 
     if (this.props.ready) {
@@ -214,6 +182,20 @@ export default class ConversationListContainer extends Component {
             activeConversationId={activeConversationId}
             onSelectConversation={actions.selectConversation}
             onDeleteConversation={actions.deleteConversation}/>
+
+          <Modal
+            animationType={"slide"}
+            transparent={true}
+            visible={showAnnouncements}
+          >
+            <View style={styles.modalBackground}>
+              <AnnouncementsList
+                messages={announcements}
+                onMarkMessageRead={actions.markMessageRead}
+                onClose={this.hideAnnouncements}
+              />
+            </View>
+          </Modal>
         </View>
       )
     } else {
@@ -228,5 +210,9 @@ export default class ConversationListContainer extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)'
   }
 });

@@ -44,6 +44,13 @@ let LayerHelper = {
         }
       }
     });
+  },
+  dateFormat: function(date) {
+    var now = new Date();
+    if (!date) return now.toLocaleDateString();
+
+    if (date.toLocaleDateString() === now.toLocaleDateString()) return date.toLocaleTimeString();
+    else return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
   }
 }
 
