@@ -13,7 +13,7 @@ export default class ConversationList extends Component {
     super(props);
 
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    
+
     this.state = {
       dataSource: ds.cloneWithRows(this.props.conversations),
     };
@@ -30,7 +30,7 @@ export default class ConversationList extends Component {
    * in the Conversation List.
    */
   render() {
-    const {activeConversationId, onDeleteConversation} = this.props;
+    const {onSelectConversation, onDeleteConversation} = this.props;
 
     return (
       <View style={styles.container}>
@@ -42,7 +42,7 @@ export default class ConversationList extends Component {
               <ConversationListItem
                 key={conversation.id}
                 conversation={conversation}
-                active={activeConversationId === conversation.id}
+                onSelectConversation={onSelectConversation}
                 onDeleteConversation={onDeleteConversation} />
             );
           }}

@@ -17,6 +17,7 @@ const {
 } = TypingIndicators;
 
 function handleAction(layerClient, typingPublisher, state, action, next) {
+  console.log('handleAction', state);
   const { type, payload } = action;
 
   switch(type) {
@@ -43,7 +44,7 @@ function handleAction(layerClient, typingPublisher, state, action, next) {
       typingPublisher.setState(FINISHED);
 
       const conversation = layerClient
-          .getConversation(`layer:///conversations/${state.router.params.conversationId}`, true);
+          .getConversation(`layer:///conversations/${state.activeConversation.activeConversationId}`, true);
       const text = state.activeConversation.composerMessage;
       let message;
 
@@ -63,7 +64,7 @@ function handleAction(layerClient, typingPublisher, state, action, next) {
     }
     case SAVE_CONVERSATION_TITLE:
       layerClient
-        .getConversation(`layer:///conversations/${state.router.params.conversationId}`, true)
+        .getConversation(`layer:///conversations/${state.activeConversation.activeConversationId}`, true)
         .setMetadataProperties({ title: state.activeConversation.title });
       return;
     case MARK_MESSAGE_READ:
@@ -71,16 +72,14 @@ function handleAction(layerClient, typingPublisher, state, action, next) {
         .getMessage(payload.messageId).isRead = true;
       return;
     case CHANGE_COMPOSER_MESSAGE:
-      if (state.router.location.pathname !== '/new') {
-        const conversationId = `layer:///conversations/${state.router.params.conversationId}`;
-        const composerMessage = state.activeConversation.composerMessage;
-        const typingState = composerMessage.length > 0 ? STARTED : FINISHED;
+      const conversationId = `layer:///conversations/${state.activeConversation.activeConversationId}`;
+      const composerMessage = state.activeConversation.composerMessage;
+      const typingState = composerMessage.length > 0 ? STARTED : FINISHED;
 
-        if (!typingPublisher.conversation || typingPublisher.conversation.id !== conversationId) {
-          typingPublisher.setConversation({ id: conversationId });
-        }
-        typingPublisher.setState(typingState);
+      if (!typingPublisher.conversation || typingPublisher.conversation.id !== conversationId) {
+        typingPublisher.setConversation({ id: conversationId });
       }
+      typingPublisher.setState(typingState);
       return;
     case DELETE_CONVERSATION:
       const conversation = layerClient

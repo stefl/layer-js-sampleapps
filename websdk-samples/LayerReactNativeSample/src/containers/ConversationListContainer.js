@@ -16,10 +16,11 @@ import ConversationListHeader from '../ui/ConversationListHeader';
 /**
  * Copy data from reducers into our properties
  */
-function mapStateToProps({ app, announcementState, participantState }) {
+function mapStateToProps({ app, announcementState, participantState, activeConversation }) {
   return {
     owner: app.owner,
     ready: app.ready,
+    activeConversationId: activeConversation.activeConversationId,
     showAnnouncements: announcementState.showAnnouncements,
     participantState
   };
@@ -49,6 +50,17 @@ function getQueries() {
 @connectQuery({}, getQueries)
 export default class ConversationListContainer extends Component {
 
+  componentWillReceiveProps(nextProps) {
+    // console.log('componentWillReceiveProps', nextProps);
+    if (nextProps.activeConversationId &&
+      nextProps.activeConversationId !== this.props.activeConversationId) {
+
+        this.props.navigator.push({
+          name: 'ActiveConversation'
+        });
+    }
+  }
+
   /**
    * Hide the Announcements Dialog
    */
@@ -71,32 +83,41 @@ export default class ConversationListContainer extends Component {
     // }
   }
 
+  // handleConversationSelected(conversationID) {
+  //   console.log('handleConversationSelected', conversationID);
+  //   this.props.navigator.push({
+  //     name: 'ActiveConversation',
+  //     conversationID: conversationID
+  //   })
+  //   this.props.actions.selectConversation(conversationID);
+  // }
+
   /**
    * Render the left panel with the Conversation List and List Header
    */
-  renderLeftPanel() {
-    const {
-      owner,
-      conversations,
-      announcements,
-      activeConversationId,
-      actions
-    } = this.props;
-
-    return (
-      <div className='left-panel'>
-        <ConversationListHeader
-          owner={owner}
-          unreadAnnouncements={Boolean(announcements.filter(item => item.isUnread).length)}
-          onShowAnnouncements={actions.showAnnouncements}
-          onShowParticipants={actions.showParticipants}/>
-        <ConversationList
-          conversations={conversations}
-          activeConversationId={activeConversationId}
-          onDeleteConversation={actions.deleteConversation}/>
-      </div>
-    );
-  }
+  // renderLeftPanel() {
+  //   const {
+  //     owner,
+  //     conversations,
+  //     announcements,
+  //     activeConversationId,
+  //     actions
+  //   } = this.props;
+  //
+  //   return (
+  //     <div className='left-panel'>
+  //       <ConversationListHeader
+  //         owner={owner}
+  //         unreadAnnouncements={Boolean(announcements.filter(item => item.isUnread).length)}
+  //         onShowAnnouncements={actions.showAnnouncements}
+  //         onShowParticipants={actions.showParticipants}/>
+  //       <ConversationList
+  //         conversations={conversations}
+  //         activeConversationId={activeConversationId}
+  //         onDeleteConversation={actions.deleteConversation}/>
+  //     </div>
+  //   );
+  // }
 
   /**
    * Render the Announcements dialog.
@@ -191,6 +212,7 @@ export default class ConversationListContainer extends Component {
           <ConversationList
             conversations={conversations}
             activeConversationId={activeConversationId}
+            onSelectConversation={actions.selectConversation}
             onDeleteConversation={actions.deleteConversation}/>
         </View>
       )

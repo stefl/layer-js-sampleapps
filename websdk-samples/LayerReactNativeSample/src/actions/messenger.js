@@ -1,5 +1,3 @@
-import toUUID from '../utils/toUUID';
-
 export const CLIENT_READY = 'CLIENT_READY';
 export const CHANGE_COMPOSER_MESSAGE = 'CHANGE_COMPOSER_MESSAGE';
 export const SUBMIT_COMPOSER_MESSAGE = 'SUBMIT_COMPOSER_MESSAGE';
@@ -20,6 +18,7 @@ export const DELETE_CONVERSATION = 'DELETE_CONVERSATION';
 export const SHOW_ANNOUNCEMENTS = 'SHOW_ANNOUNCEMENTS';
 export const HIDE_ANNOUNCEMENTS = 'HIDE_ANNOUNCEMENTS';
 export const OWNER_SET = 'OWNER_SET';
+export const SELECT_CONVERSATION = 'SELECT_CONVERSATION';
 
 export function ownerSet(owner) {
   return {
@@ -39,6 +38,15 @@ export function clientReady() {
 // export function selectConversation(conversationId) {
 //   return push(`/conversations/${toUUID(conversationId)}`);
 // }
+
+export function selectConversation(conversationId) {
+  return {
+    type: SELECT_CONVERSATION,
+    payload: {
+      conversationId
+    }
+  };
+}
 
 export function deleteConversation(conversationId) {
   return {

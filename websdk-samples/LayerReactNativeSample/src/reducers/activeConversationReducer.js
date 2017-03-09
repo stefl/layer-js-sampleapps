@@ -6,22 +6,27 @@ import {
   CHANGE_CONVERSATION_TITLE,
   SAVE_CONVERSATION_TITLE,
   CANCEL_EDIT_CONVERSATION_TITLE,
-  LOAD_MORE_MESSAGES
+  LOAD_MORE_MESSAGES,
+  SELECT_CONVERSATION
 } from '../actions/messenger';
 
 const initialState = {
   editingTitle: false,
   title: '',
   composerMessage: '',
-  messagePagination: 30
+  messagePagination: 30,
+  activeConversationId: null
 };
 
 export default function activeConversationReducer(state = initialState, action) {
   const { payload, type } = action;
 
   switch (type) {
-    case ROUTER_DID_CHANGE:
-      return initialState;
+    case SELECT_CONVERSATION:
+      return {
+        ...initialState,
+        activeConversationId: payload.conversationId
+      }
     case CHANGE_COMPOSER_MESSAGE:
       return {
         ...state,

@@ -19,16 +19,14 @@ export default class ConversationListItem extends Component {
     this.props.onDeleteConversation(this.props.conversation.id);
   }
 
-  render() {
-    const { conversation, active, deleteConversation } = this.props;
-    const participantUsers = conversation.participants.filter(user => !user.sessionOwner);
-    // const conversationUrl = `/conversations/${toUUID(conversation.id)}`;
+  handleSelectConversation = () => {
+  // const conversationUrl = `/conversations/${toUUID(conversation.id)}`;
+    this.props.onSelectConversation(toUUID(this.props.conversation.id));
+  }
 
-    // const styles = cx({
-    //   'conversation-item': true,
-    //   'unread-messages': conversation.unreadCount > 0,
-    //   'selected-conversation': active
-    // });
+  render() {
+    const { conversation } = this.props;
+    const participantUsers = conversation.participants.filter(user => !user.sessionOwner);
 
     const title = conversation.metadata.title || participantUsers.map(function(user) {
       return user.displayName;
@@ -37,7 +35,7 @@ export default class ConversationListItem extends Component {
     // Render the UI
     return (
       <TouchableOpacity style={styles.container}
-                        onPress={() => {console.log('conversation selected')}}
+                        onPress={this.handleSelectConversation}
                         activeOpacity={.5}
       >
         <Avatar users={participantUsers}/>
