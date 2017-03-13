@@ -36,7 +36,6 @@ function mapDispatchToProps(dispatch) {
  * this.props.messages.
  */
 function getQueries({ activeConversationId, messagePagination }) {
-  // console.log('getQueries', activeConversationId, messagePagination);
   if (!activeConversationId) {
     return {};
   }
@@ -56,12 +55,9 @@ export default class ActiveConversationContainer extends Component {
 
   constructor(props) {
     super(props);
-
-    // console.log('ActiveConversationContainer', props);
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log('ActiveConversationContainer componentWillReceiveProps', nextProps);
     if (!nextProps.activeConversationId) {
       this.props.navigator.pop();
     }
@@ -78,7 +74,6 @@ export default class ActiveConversationContainer extends Component {
       actions
     } = this.props;
 
-    console.log('render', conversations);
     // set this on state in ConversationListContainer instead of running this query again
     const activeConversation = conversations.find((conversation) => {
       return conversation.id === activeConversationId;

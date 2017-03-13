@@ -14,6 +14,7 @@ import * as MessengerActions from '../actions/messenger';
 import ConversationList from '../ui/ConversationList';
 import ConversationListHeader from '../ui/ConversationListHeader';
 import AnnouncementsList from '../ui/announcements/MessageList';
+import UserListDialog from '../ui/UserListDialog'
 
 /**
  * Copy data from reducers into our properties
@@ -53,7 +54,6 @@ function getQueries() {
 export default class ConversationListContainer extends Component {
 
   componentWillReceiveProps(nextProps) {
-    // console.log('componentWillReceiveProps', nextProps);
     if (nextProps.activeConversationId &&
       nextProps.activeConversationId !== this.props.activeConversationId) {
 
@@ -69,9 +69,7 @@ export default class ConversationListContainer extends Component {
   hideAnnouncements = (event) => {
     const { actions } = this.props;
     const { hideAnnouncements } = actions;
-    // if (event.target.parentNode.classList.contains('announcements-dialog')) {
-      hideAnnouncements();
-    // }
+    hideAnnouncements();
   }
 
   /**
@@ -80,27 +78,7 @@ export default class ConversationListContainer extends Component {
   hideParticipants = (event) => {
     const { actions } = this.props;
     const { hideParticipants } = actions;
-    // if (event.target.parentNode.classList.contains('participants-dialog')) {
-      hideParticipants();
-    // }
-  }
-
-  /**
-   * Render the Announcements dialog.
-   */
-  renderAnnouncementDialog() {
-    const { announcements, actions } = this.props;
-    return (
-      <div
-        onClick={this.hideAnnouncements}
-        className="announcements-dialog dialog">
-        <div>
-          <AnnouncementsList
-            messages={announcements}
-            onMarkMessageRead={actions.markMessageRead}/>
-        </div>
-      </div>
-    );
+    hideParticipants();
   }
 
   /**
@@ -127,47 +105,21 @@ export default class ConversationListContainer extends Component {
   }
 
   /**
-   * Render the Main UI
-   */
-  // renderMessenger() {
-  //   const {
-  //     showAnnouncements,
-  //     participantState,
-  //     users,
-  //     conversations,
-  //     announcements
-  //   } = this.props;
-  //   const { showParticipants } = participantState;
-  //
-  //   // Render the left-panel which contains the Conversation List
-  //   // and the right-panel which consists of the child components
-  //   // (currently IndexRoute and Route with ActiveConversation)
-  //   return (
-  //     <div className='messenger'>
-  //       {this.renderLeftPanel()}
-  //       {this.props.children && React.cloneElement(this.props.children, {
-  //         conversations,
-  //         users
-  //       })}
-  //       {showAnnouncements ? this.renderAnnouncementDialog() : <span />}
-  //       {showParticipants ? this.renderParticipantDialog() : <span />}
-  //     </div>
-  //   );
-  // }
-
-  /**
    * If we are ready, render the Messenger, else render a blank screen
    */
   render() {
     const {
       owner,
+      users,
       conversations,
       announcements,
       activeConversationId,
       actions,
       showAnnouncements,
-      showParticipants
+      participantState
     } = this.props;
+
+    const { showParticipants, participants } = participantState;
 
     if (this.props.ready) {
       return (
@@ -193,6 +145,23 @@ export default class ConversationListContainer extends Component {
                 messages={announcements}
                 onMarkMessageRead={actions.markMessageRead}
                 onClose={this.hideAnnouncements}
+              />
+            </View>
+          </Modal>
+
+          <Modal
+            animationType={"slide"}
+            transparent={true}
+            visible={showParticipants}
+          >
+            <View style={styles.modalBackground}>
+              <UserListDialog
+                users={users.filter(user => user.id !== owner.id)}
+                selectedUsers={participants}
+                onUserSelected={actions.addParticipant}
+                onUserUnselected={actions.removeParticipant}
+                onSave={actions.createConversation}
+                onClose={this.hideParticipants}
               />
             </View>
           </Modal>

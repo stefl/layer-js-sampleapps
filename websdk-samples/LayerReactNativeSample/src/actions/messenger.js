@@ -1,3 +1,5 @@
+import toUUID from '../utils/toUUID';
+
 export const CLIENT_READY = 'CLIENT_READY';
 export const CHANGE_COMPOSER_MESSAGE = 'CHANGE_COMPOSER_MESSAGE';
 export const SUBMIT_COMPOSER_MESSAGE = 'SUBMIT_COMPOSER_MESSAGE';
@@ -40,6 +42,8 @@ export function clientReady() {
 // }
 
 export function selectConversation(conversationId) {
+  if (conversationId) conversationId = toUUID(conversationId);
+
   return {
     type: SELECT_CONVERSATION,
     payload: {

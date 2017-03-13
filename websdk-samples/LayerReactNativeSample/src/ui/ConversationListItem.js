@@ -6,7 +6,6 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-import toUUID from '../utils/toUUID';
 import Avatar from './Avatar';
 
 /**
@@ -20,8 +19,7 @@ export default class ConversationListItem extends Component {
   }
 
   handleSelectConversation = () => {
-  // const conversationUrl = `/conversations/${toUUID(conversation.id)}`;
-    this.props.onSelectConversation(toUUID(this.props.conversation.id));
+    this.props.onSelectConversation(this.props.conversation.id);
   }
 
   render() {
@@ -50,7 +48,6 @@ export default class ConversationListItem extends Component {
     );
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {

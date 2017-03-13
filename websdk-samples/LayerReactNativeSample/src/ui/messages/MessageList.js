@@ -15,7 +15,6 @@ import MessageListItem from './MessageListItem';
  */
 export default class MessageList extends Component {
 
-
   constructor(props) {
     super(props);
 

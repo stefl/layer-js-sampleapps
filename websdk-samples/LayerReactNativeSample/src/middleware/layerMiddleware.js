@@ -17,7 +17,6 @@ const {
 } = TypingIndicators;
 
 function handleAction(layerClient, typingPublisher, state, action, next) {
-  console.log('handleAction', state);
   const { type, payload } = action;
 
   switch(type) {
