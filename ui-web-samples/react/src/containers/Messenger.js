@@ -87,7 +87,7 @@ export default class Messenger extends Component {
    */
   onConversationSelected = (event) => {
     const { actions } = this.props;
-    actions.selectConversation(event.detail.conversation.toObject());
+    actions.selectConversation(event.detail.item.toObject());
   }
 
   /**
@@ -95,11 +95,11 @@ export default class Messenger extends Component {
    */
   onNotificationClick = (event) => {
     const { actions } = this.props;
-    actions.selectConversationId(event.detail.message.conversationId);
+    actions.selectConversationId(event.detail.item.conversationId);
   }
 
   onMessageNotification = (event) => {
-    if (event.detail.message.conversationId === this.props.activeConversationId && !event.detail.isBackground) {
+    if (event.detail.item.conversationId === this.props.activeConversationId && !event.detail.isBackground) {
       event.preventDefault();
     }
   }

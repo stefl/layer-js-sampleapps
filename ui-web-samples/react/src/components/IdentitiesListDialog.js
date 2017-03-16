@@ -18,7 +18,7 @@ export default class IdentitiesListDialog extends Component {
    */
   onIdentitySelected = (event) => {
     const { actions } = this.props;
-    const identity  = event.detail.identity.toObject();
+    const identity  = event.detail.item.toObject();
     if (this.props.onIdentitySelected) this.props.onIdentitySelected(identity);
   }
 
@@ -27,7 +27,7 @@ export default class IdentitiesListDialog extends Component {
    */
   onIdentityDeselected = (event) => {
     const { actions } = this.props;
-    const identity = event.detail.identity.toObject();
+    const identity = event.detail.item.toObject();
     if (this.props.onIdentitySelected) this.props.onIdentityDeselected(identity);
   }
 
