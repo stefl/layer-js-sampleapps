@@ -7,6 +7,7 @@ import {
 
 import TextMessagePart from './TextMessagePart';
 import QuoteMessagePart from './QuoteMessagePart';
+import ImageMessagePart from './ImageMessagePart';
 import Avatar from '../Avatar';
 
 /**
@@ -58,8 +59,13 @@ export default class MessageListItem extends Component {
           <QuoteMessagePart
             key={messagePart.id}
             messagePart={messagePart}/>);
+      case 'image/jpeg+preview':
+        return (
+          <ImageMessagePart
+            key={messagePart.id}
+            messagePart={messagePart}/>);
       default:
-        return (<div key={messagePart.id} />);
+        return (<View key={messagePart.id} />);
     }
   }
 
@@ -75,6 +81,7 @@ export default class MessageListItem extends Component {
         <View style={styles.main}>
           <Text style={styles.userName}>{user.displayName}</Text>
           <View style={styles.messageParts}>
+            {/*TODO: special case for images so that tapping on a preview of an image with launch a modal with the full version*/}
            {message.parts.map(messagePart => this.renderPart(messagePart))}
          </View>
         </View>
