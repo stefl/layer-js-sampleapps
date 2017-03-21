@@ -8,8 +8,6 @@ import { Provider } from 'react-redux';
 import { LayerProvider } from 'layer-react';
 import ConversationListContainer from './containers/ConversationListContainer.js';
 import ActiveConversationContainer from './containers/ActiveConversationContainer.js';
-// import ActiveConversation from './containers/ActiveConversation';
-// import DefaultPanel from './components/DefaultPanel';
 
 export default class ChatView extends Component {
 

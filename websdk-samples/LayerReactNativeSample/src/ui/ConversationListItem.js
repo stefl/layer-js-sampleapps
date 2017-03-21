@@ -3,8 +3,11 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  Modal
 } from 'react-native';
+
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Avatar from './Avatar';
 
@@ -14,6 +17,13 @@ import Avatar from './Avatar';
  * Avatar, title and Delete button.
  */
 export default class ConversationListItem extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showDeleteConfirm: false
+    }
+  }
+
   handleDeleteConversation = () => {
     this.props.onDeleteConversation(this.props.conversation.id);
   }
@@ -38,12 +48,45 @@ export default class ConversationListItem extends Component {
       >
         <Avatar users={participantUsers}/>
         <Text style={[styles.title, (conversation.unreadCount > 0) ? styles.titleUnread : {}]}>{title}</Text>
-        {/* TODO: how to delete?
-            <span
-              className="delete fa fa-times-circle"
-              title="Delete conversation"
-              onClick={this.handleDeleteConversation}/>
-              */}
+
+
+        <TouchableOpacity style={styles.deleteButton}
+                          onPress={() => {this.setState({showDeleteConfirm: true})}}
+                          activeOpacity={.5}
+        >
+          <Icon style={styles.deleteIcon} name='times-circle' />
+        </TouchableOpacity>
+
+        <Modal
+          animationType={"slide"}
+          transparent={true}
+          visible={this.state.showDeleteConfirm}
+        >
+          <View style={styles.modalBackground}>
+            <View style={styles.confirmDeleteDialog}>
+              <Text style={styles.confirmText}>Are you sure you want to delete this conversation?</Text>
+              <View style={styles.confirmButtonsContainer}>
+                <TouchableOpacity style={styles.confirmButton}
+                                  onPress={() => {
+                                    this.setState({showDeleteConfirm: false});
+                                    this.handleDeleteConversation();
+                                  }}
+                                  activeOpacity={.5}
+                >
+                  <Text style={styles.confirmButtonText}>Delete</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.confirmButton}
+                                  onPress={() => {
+                                    this.setState({showDeleteConfirm: false});
+                                  }}
+                                  activeOpacity={.5}
+                >
+                  <Text style={styles.confirmButtonText}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </TouchableOpacity>
     );
   }
@@ -69,5 +112,43 @@ const styles = StyleSheet.create({
   titleUnread: {
     color: 'black',
     fontWeight: 'bold'
+  },
+  deleteButton: {
+    padding: 10,
+  },
+  deleteIcon: {
+    fontSize: 20,
+    color: '#999'
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center'
+  },
+  confirmDeleteDialog: {
+    backgroundColor: 'white',
+    marginHorizontal: 30
+  },
+  confirmText: {
+    fontFamily: 'System',
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop: 20
+  },
+  confirmButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 20
+  },
+  confirmButton: {
+    borderWidth: 1,
+    borderColor: '#aaa',
+    padding: 10,
+    marginHorizontal: 10
+  },
+  confirmButtonText: {
+    fontFamily: 'System',
+    fontSize: 16
   }
 });

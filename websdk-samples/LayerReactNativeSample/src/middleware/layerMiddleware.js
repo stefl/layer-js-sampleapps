@@ -46,7 +46,6 @@ function handleAction(layerClient, typingPublisher, state, action, next) {
           .getConversation(`layer:///conversations/${state.activeConversation.activeConversationId}`, true);
       const text = state.activeConversation.composerMessage;
       let message;
-
       if (text.indexOf('> ') === 0) {
         message = conversation.createMessage({
           parts: [{
@@ -81,12 +80,8 @@ function handleAction(layerClient, typingPublisher, state, action, next) {
       typingPublisher.setState(typingState);
       return;
     case DELETE_CONVERSATION:
-      const conversation = layerClient
-        .getConversation(payload.conversationId);
-
-      if (confirm('Are you sure you want to delete this conversation?')) {
-        conversation.delete(layer.Constants.DELETION_MODE.ALL);
-      }
+      const conversation = layerClient.getConversation(payload.conversationId);
+      conversation.delete(layer.Constants.DELETION_MODE.ALL);
       return;
     default:
       return;
