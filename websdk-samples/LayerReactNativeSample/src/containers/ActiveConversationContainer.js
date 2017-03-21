@@ -13,6 +13,7 @@ import * as MessengerActions from '../actions/messenger';
 import ConversationHeader from '../ui/ConversationHeader';
 import MessageList from '../ui/messages/MessageList';
 import MessageComposer from '../ui/MessageComposer';
+import TypingIndicatorContainer from './TypingIndicatorContainer';
 
 /**
  * Copy data from reducers into our properties
@@ -95,9 +96,9 @@ export default class ActiveConversationContainer extends Component {
           messages={messages}
           onMarkMessageRead={actions.markMessageRead}
           onLoadMoreMessages={actions.loadMoreMessages}/>
-{/*
+
         <TypingIndicatorContainer
-          conversationId={activeConversationId}/>*/}
+          conversationId={activeConversationId}/>
 
         <MessageComposer
           value={composerMessage}
