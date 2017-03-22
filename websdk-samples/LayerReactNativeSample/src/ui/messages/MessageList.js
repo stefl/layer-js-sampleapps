@@ -21,48 +21,35 @@ export default class MessageList extends Component {
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     const reversedMessages = this.props.messages.concat().reverse();
 
-    console.log('reversedMessages', reversedMessages);
+    this.stickBottom = true;
 
     this.state = {
       dataSource: ds.cloneWithRows(reversedMessages),
-      stickBottom: true
     };
   }
 
   componentWillReceiveProps(nextProps) {
     const reversedMessages = nextProps.messages.concat().reverse();
 
-    console.log('componentWillReceiveProps reversedMessages', reversedMessages);
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(reversedMessages),
     })
   }
 
-  componentDidMount() {
-    this.scrollBottom();
-  }
-
   componentDidUpdate() {
-    if (this.state.stickBottom) {
-      this.scrollBottom();
+    if (this.stickBottom) {
+      setTimeout(this.scrollBottom.bind(this), 300);
     }
   }
 
   scrollBottom() {
     // scroll to bottom of list
+    this.refs.listView.scrollToEnd({animated: false});
   }
 
-  handleScroll() {
-    // var el = findDOMNode(this);
-    // if (el.scrollTop === 0) {
-    //   this.props.onLoadMoreMessages();
-    // }
-
-    const stickBottom = el.scrollHeight - 1 <= el.clientHeight + el.scrollTop;
-
-    if (stickBottom !== this.state.stickBottom) {
-      this.setState({ stickBottom });
-    }
+  handleScroll(e) {
+    let nativeEvent = e.nativeEvent;
+    this.stickBottom = (nativeEvent.contentSize.height - (nativeEvent.contentOffset.y + nativeEvent.layoutMeasurement.height)) < 30;
   }
 
   render() {
@@ -71,6 +58,8 @@ export default class MessageList extends Component {
     return (
       <View style={styles.container}>
         <ListView
+          ref='listView'
+          style={styles.listView}
           enableEmptySections={true}
           dataSource={this.state.dataSource}
           renderRow={(message) => {
@@ -81,6 +70,9 @@ export default class MessageList extends Component {
                 onMarkMessageRead={onMarkMessageRead}/>
             );
           }}
+          onEndReached={this.props.onLoadMoreMessages}
+          onScroll={this.handleScroll.bind(this)}
+          scrollEventThrottle={100}
         />
       </View>
     );
@@ -91,5 +83,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  listView: {
   }
 });
