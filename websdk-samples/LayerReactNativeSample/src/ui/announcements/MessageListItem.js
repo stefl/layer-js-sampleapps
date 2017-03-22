@@ -78,12 +78,10 @@ const styles = StyleSheet.create({
     color: '#666',
     fontWeight: 'bold',
     width: 100,
-    // backgroundColor: 'yellow'
   },
   announcementParts: {
     marginHorizontal: 5,
     flex: 1,
-    // backgroundColor: 'green'
   },
   unreadBullet: {
     marginTop: 3,
@@ -95,6 +93,5 @@ const styles = StyleSheet.create({
     width: 100,
     color: '#666',
     textAlign: 'right',
-    // backgroundColor: 'pink'
   }
 });

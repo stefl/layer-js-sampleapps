@@ -7,7 +7,6 @@ import {
 
 import TextMessagePart from './TextMessagePart';
 import QuoteMessagePart from './QuoteMessagePart';
-import ImageMessagePart from './ImageMessagePart';
 import Avatar from '../Avatar';
 
 /**
@@ -57,11 +56,6 @@ export default class MessageListItem extends Component {
       case 'text/quote':
         return (
           <QuoteMessagePart
-            key={messagePart.id}
-            messagePart={messagePart}/>);
-      case 'image/jpeg+preview':
-        return (
-          <ImageMessagePart
             key={messagePart.id}
             messagePart={messagePart}/>);
       default:

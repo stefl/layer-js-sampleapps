@@ -70,8 +70,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     margin: 20,
-    // marginBottom: 50,
-    // marginHorizontal: 20,
     borderColor: '#777',
     borderWidth: 2
   },
