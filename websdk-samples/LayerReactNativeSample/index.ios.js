@@ -20,7 +20,7 @@ import { ownerSet } from './src/actions/messenger';
 import ChatView from './src/ChatView'
 import UserSelectDialog from './src/UserSelectDialog'
 
-const appId = 'layer:///apps/staging/1d980162-c5ee-11e5-bb69-e08c0300541f';
+const appId = LayerHelper.appId;
 
 export default class LayerReactNativeSample extends Component {
 
@@ -45,7 +45,7 @@ export default class LayerReactNativeSample extends Component {
      * See http://static.layer.com/sdk/docs/#!/api/layer.Client-event-challenge
      */
     this.client.once('challenge', e => {
-      LayerHelper.getIdentityToken(appId, this.state.userId, e.nonce, e.callback);
+      LayerHelper.getIdentityToken(appId, e.nonce, e.callback, this.state.userId);
     });
 
     this.client.on('ready', () => {

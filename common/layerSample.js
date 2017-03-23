@@ -31,7 +31,9 @@ window.layerSample = {
       }
     });
   },
-  getIdentityToken: function(appId, nonce, callback) {
+  getIdentityToken: function(appId, nonce, callback, userId) {
+    var userId = userId || window.layerSample.userId;
+
     layer.xhr({
       url: 'https://layer-identity-provider.herokuapp.com/identity_tokens',
       headers: {
@@ -44,7 +46,7 @@ window.layerSample = {
         nonce: nonce,
         app_id: appId,
         user: {
-          id: window.layerSample.userId
+          id: userId
         }
       }
     }, function(res) {
@@ -54,12 +56,16 @@ window.layerSample = {
         callback(res.data.identity_token);
 
         // Cleanup identity dialog
-        var node = document.getElementById('identity');
-        node.parentNode.removeChild(node);
+        if (typeof document !== 'undefined') {
+          var node = document.getElementById('identity');
+          node.parentNode.removeChild(node);
+        }
       } else {
         console.error('getIdentityToken error: ', res.data);
-        loginButton.innerHTML = 'Login';
-        errorDiv.innerHTML = 'Invalid Application ID';
+        if (typeof document !== 'undefined') {
+          loginButton.innerHTML = 'Login';
+          errorDiv.innerHTML = 'Invalid Application ID';
+        }
       }
     });
   },
@@ -75,46 +81,48 @@ window.layerSample = {
   }
 };
 
-document.addEventListener('DOMContentLoaded', function() {
-  /**
-   * Dirty HTML dialog injection
-   */
-  var div = document.createElement('div');
-  div.innerHTML += '<img src="http://static.layer.com/logo-only-blue.png" />';
-  div.innerHTML += '<h1>Welcome to Layer sample app!</h1>';
+if (typeof document !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', function() {
+    /**
+     * Dirty HTML dialog injection
+     */
+    var div = document.createElement('div');
+    div.innerHTML += '<img src="http://static.layer.com/logo-only-blue.png" />';
+    div.innerHTML += '<h1>Welcome to Layer sample app!</h1>';
 
-  div.innerHTML += '<p>2. Select a user to login as:</p>';
+    div.innerHTML += '<p>2. Select a user to login as:</p>';
 
-  for (var i = 0; i <= 5; i++) {
-    var checked = i === 0 ? 'checked' : '';
-    div.innerHTML += '<label><input type="radio" name="user" value="' + i + '" ' + checked + '/>' +
-      'User ' + i + '</label>';
-  }
-
-  errorDiv = document.createElement('div');
-  errorDiv.className = 'error-message';
-  errorDiv.innerHTML = "&nbsp;";
-  div.appendChild(errorDiv);
-
-  loginButton = document.createElement('button');
-  loginButton.appendChild(document.createTextNode('Login'));
-
-  div.appendChild(loginButton);
-
-  var container = document.createElement('div');
-  container.setAttribute('id', 'identity');
-  container.appendChild(div);
-  document.body.insertBefore(container, document.querySelectorAll('.main-app')[0]);
-
-  loginButton.addEventListener('click', function() {
-    var radios = div.getElementsByTagName('input');
-    for (var i = 0; i < radios.length; i++) {
-      if (radios[i].type === 'radio' && radios[i].checked) {
-        loginButton.innerHTML = '<i class="fa fa-spinner fa-pulse"></i>';
-        window.layerSample.userId = radios[i].value;
-        window.layerSample.userIdCallback(window.layerSample.userId);
-        break;
-      }
+    for (var i = 0; i <= 5; i++) {
+      var checked = i === 0 ? 'checked' : '';
+      div.innerHTML += '<label><input type="radio" name="user" value="' + i + '" ' + checked + '/>' +
+        'User ' + i + '</label>';
     }
+
+    errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.innerHTML = "&nbsp;";
+    div.appendChild(errorDiv);
+
+    loginButton = document.createElement('button');
+    loginButton.appendChild(document.createTextNode('Login'));
+
+    div.appendChild(loginButton);
+
+    var container = document.createElement('div');
+    container.setAttribute('id', 'identity');
+    container.appendChild(div);
+    document.body.insertBefore(container, document.querySelectorAll('.main-app')[0]);
+
+    loginButton.addEventListener('click', function() {
+      var radios = div.getElementsByTagName('input');
+      for (var i = 0; i < radios.length; i++) {
+        if (radios[i].type === 'radio' && radios[i].checked) {
+          loginButton.innerHTML = '<i class="fa fa-spinner fa-pulse"></i>';
+          window.layerSample.userId = radios[i].value;
+          window.layerSample.userIdCallback(window.layerSample.userId);
+          break;
+        }
+      }
+    });
   });
-});
+}
