@@ -8,7 +8,8 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
-  View
+  View,
+  Modal,
 } from 'react-native';
 
 import { Client, Query } from 'layer-websdk/index-react-native.js';
@@ -16,15 +17,19 @@ import { Client, Query } from 'layer-websdk/index-react-native.js';
 import LayerHelper from './src/layer_helper.js'
 import configureStore from './src/store/configureStore';
 import { ownerSet } from './src/actions/messenger';
-import ChatView from './src/ChatView.js'
+import ChatView from './src/ChatView'
+import UserSelectDialog from './src/UserSelectDialog'
 
 const appId = 'layer:///apps/staging/1d980162-c5ee-11e5-bb69-e08c0300541f';
-const userId = '1';
 
 export default class LayerReactNativeSample extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      userId: null,
+    }
 
     /**
      * Initialize Layer Client with `appId`
@@ -40,17 +45,12 @@ export default class LayerReactNativeSample extends Component {
      * See http://static.layer.com/sdk/docs/#!/api/layer.Client-event-challenge
      */
     this.client.once('challenge', e => {
-      LayerHelper.getIdentityToken(appId, userId, e.nonce, e.callback);
+      LayerHelper.getIdentityToken(appId, this.state.userId, e.nonce, e.callback);
     });
 
     this.client.on('ready', () => {
       this.store.dispatch(ownerSet(this.client.user.toObject()));
     });
-
-    /**
-     * Start authentication
-     */
-    this.client.connect(userId);
 
     /**
      * Share the client with the middleware layer
@@ -63,10 +63,31 @@ export default class LayerReactNativeSample extends Component {
     LayerHelper.validateSetup(this.client);
   }
 
+  login(userId) {
+    this.setState({
+      userId: userId
+    });
+
+    /**
+     * Start authentication
+     */
+    this.client.connect(userId);
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <ChatView client={this.client} store={this.store} />
+
+        <Modal
+          animationType={"slide"}
+          transparent={true}
+          visible={this.state.userId === null}
+        >
+          <View style={styles.modalBackground}>
+            <UserSelectDialog onSelectUser={this.login.bind(this)} />
+          </View>
+        </Modal>
       </View>
     );
   }
@@ -75,7 +96,12 @@ export default class LayerReactNativeSample extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1
-  }
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center'
+  },
 });
 
 AppRegistry.registerComponent('LayerReactNativeSample', () => LayerReactNativeSample);
