@@ -93,3 +93,25 @@ fs.writeFile("./common/config.js", `window.layerSample.appId = '${fullAppId || b
   }
   console.log('App ID successfully configured!');
 });
+
+var rd;
+var wr;
+rd = fs.createReadStream("./common/config.js");
+rd.on("error", function(err) {
+  console.log('error copying file ./common/config.js into ./websdk-samples/LayerReactNativeSample/config.js. Please copy manually.');
+});
+wr = fs.createWriteStream("./websdk-samples/LayerReactNativeSample/config.js");
+wr.on("error", function(err) {
+  console.log('error copying file ./common/config.js into ./websdk-samples/LayerReactNativeSample/config.js. Please copy manually.');
+});
+rd.pipe(wr);
+
+rd = fs.createReadStream("./common/layerSample.js");
+rd.on("error", function(err) {
+  console.log('error copying file ./common/layerSample.js into ./websdk-samples/LayerReactNativeSample/layerSample.js. Please copy manually.');
+});
+wr = fs.createWriteStream("./websdk-samples/LayerReactNativeSample/layerSample.js");
+wr.on("error", function(err) {
+  console.log('error copying file ./common/layerSample.js into ./websdk-samples/LayerReactNativeSample/layerSample.js. Please copy manually.');
+});
+rd.pipe(wr);
