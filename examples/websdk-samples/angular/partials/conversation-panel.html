@@ -12,7 +12,7 @@
 
       <div class="edit-title" ng-show="editingTitle">
         <input type="text" ng-value="getConversationTitle(chatCtrlState.currentConversation)"
-               ng-enter="saveTitle()" ng-model='chatCtrlState.currentConversation.metadata.title'/>
+               ng-enter="saveTitle()" ng-model='chatCtrlState.currentConversation.metadata.conversationName'/>
         <button ng-click="setEditTitle(false)" >Cancel</button>
       </div>
     </div>

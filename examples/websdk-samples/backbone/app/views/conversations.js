@@ -19,7 +19,7 @@ module.exports = Backbone.View.extend({
       var participants = conversation.participants;
       var client = conversation.getClient();
 
-      var title = conversation.metadata.title;
+      var title = conversation.metadata.conversationName;
       if (!title) {
         title = participants
         .filter(function(user) {

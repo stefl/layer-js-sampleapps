@@ -25,6 +25,33 @@
     email: null,
     password: null,
     validateSetup: function(client) {
+      var conversationQuery = client.createQuery({
+        paginationWindow: 1,
+        model: layer.Query.Conversation
+      });
+      conversationQuery.on('change:data', function() {
+        if (conversationQuery.data.length === 0) {
+          var identityQuery = client.createQuery({
+            paginationWindow: 5,
+            model: layer.Query.Identity
+          });
+          identityQuery.on('change:data', function() {
+            if (identityQuery.data.length === 0) {
+              alert("There are no other users to talk to; please use your Identity Server to register new users");
+            } else {
+              var conversation = client.createConversation({
+                participants: identityQuery.data.map(function(user) {
+                  return user.id;
+                }),
+                metadata: {
+                  conversationName: "Sample Conversation"
+                }
+              });
+              conversation.createMessage("Welcome to the new Conversation").send();
+            }
+          });
+        }
+      });
     },
     getIdentityToken: function(nonce, callback) {
       layer.xhr({
@@ -76,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
   form.innerHTML += '<div class="login-group"><label for="password">Password</label><input type="password" id="password" /></div>';
 
   var button = document.createElement('button');
-  button.type = 'button';
+  button.type = 'submit';
   button.appendChild(document.createTextNode('Login'));
 
   form.appendChild(button);
@@ -86,7 +113,8 @@ document.addEventListener('DOMContentLoaded', function() {
   container.appendChild(form);
   document.body.insertBefore(container, document.querySelectorAll('.main-app')[0]);
 
-  function submit() {
+  function submit(evt) {
+    evt.preventDefault();
     window.layerSample.email = document.getElementById('email').value;
     window.layerSample.password = document.getElementById('password').value;
     if (window.layerSample.email && window.layerSample.password) {
@@ -96,6 +124,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  button.addEventListener('click', submit);
   form.addEventListener('submit', submit);
 });

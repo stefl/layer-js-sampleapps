@@ -42,12 +42,12 @@ module.exports = Backbone.View.extend({
     }
     else if (this.editTitle) {
       html = '<div class="edit-title">' +
-                '<input type="text" placeholder="Conversation title..." value="' + (this.conversation.metadata.title || '') + '">' +
+                '<input type="text" placeholder="Conversation title..." value="' + (this.conversation.metadata.conversationName || '') + '">' +
                 '<button class="cancel">Cancel</button>' +
               '</div>';
     }
     else if (this.conversation) {
-      var title = this.conversation.metadata.title;
+      var title = this.conversation.metadata.conversationName;
       if (!title) {
         title = this.conversation.participants
         .filter(function(user) {
@@ -72,7 +72,9 @@ module.exports = Backbone.View.extend({
   },
   titleChange: function(e) {
     if (this.editTitle && e.keyCode === 13) {
-      this.conversation.setMetadataProperties({title: e.target.value});
+      this.conversation.setMetadataProperties({
+        conversationName: e.target.value
+      });
       this.titleCancel();
     }
     else this.trigger('conversation:title', e.target.value);

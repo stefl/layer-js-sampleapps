@@ -78,7 +78,9 @@ function handleAction(layerClient, state, action, next) {
     case SAVE_CONVERSATION_TITLE:
       layerClient
         .getConversation(`layer:///conversations/${state.router.params.conversationId}`, true)
-        .setMetadataProperties({ title: state.activeConversationState.title });
+        .setMetadataProperties({
+          conversationName: state.activeConversationState.title
+        });
       return;
 
     // We use this for Announcements; <layer-conversation> handles marking messages read for messages in its view

@@ -23,11 +23,11 @@ controllers.controller('conversationCtrl', function($scope) {
   $scope.$watch('chatCtrlState.currentConversation.id', function(newId, oldId) {
 
     // For the new Conversation, listen for all changes to this Conversation's properties;
-    // Primarily for rendering changes to metadata.title
+    // Primarily for rendering changes to metadata.conversationName
     if (newId) {
       var conversation = $scope.appCtrlState.client.getConversation(newId);
       if (conversation) conversation.on('conversations:change', $scope.handleConversationChange);
-      $scope.headerState.title = conversation.metadata.title;
+      $scope.headerState.title = conversation.metadata.conversationName;
     }
 
     // Stop listening to the old Conversation's property changes.
@@ -43,7 +43,7 @@ controllers.controller('conversationCtrl', function($scope) {
    */
   $scope.handleConversationChange = function(evt) {
     $scope.chatCtrlState.currentConversation = evt.target.toObject();
-    if (!$scope.editingTitle) $scope.headerState.title = evt.target.metadata.title;
+    if (!$scope.editingTitle) $scope.headerState.title = evt.target.metadata.conversationName;
     $scope.$digest();
   };
 
@@ -51,7 +51,7 @@ controllers.controller('conversationCtrl', function($scope) {
    * User is now editting or done editting the title of the Conversation
    */
   $scope.setEditTitle = function(state) {
-    if (!state) $scope.headerState.title = $scope.chatCtrlState.currentConversation.metadata.title;
+    if (!state) $scope.headerState.title = $scope.chatCtrlState.currentConversation.metadata.conversationName;
     $scope.editingTitle = state;
   };
 
@@ -63,13 +63,12 @@ controllers.controller('conversationCtrl', function($scope) {
   $scope.saveTitle = function() {
     var conversationInstance = $scope.appCtrlState.client.getConversation($scope.chatCtrlState.currentConversation.id);
     if (conversationInstance) {
-      $scope.chatCtrlState.currentConversation.metadata.title = $scope.headerState.title;
+      $scope.chatCtrlState.currentConversation.metadata.conversationName = $scope.headerState.title;
       conversationInstance.setMetadataProperties({
-        title: $scope.headerState.title
+        conversationName: $scope.headerState.title
       });
     }
     $scope.editingTitle = false;
-    $scope.$apply();
   };
 
   new layerUI.files.DragAndDropFileWatcher({

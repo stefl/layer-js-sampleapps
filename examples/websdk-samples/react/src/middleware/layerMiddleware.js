@@ -64,7 +64,9 @@ function handleAction(layerClient, typingPublisher, state, action, next) {
     case SAVE_CONVERSATION_TITLE:
       layerClient
         .getConversation(`layer:///conversations/${state.router.params.conversationId}`, true)
-        .setMetadataProperties({ title: state.activeConversation.title });
+        .setMetadataProperties({
+          conversationName: state.activeConversation.title
+        });
       return;
     case MARK_MESSAGE_READ:
       layerClient

@@ -27,7 +27,7 @@ export default class ConversationListItem extends Component {
       'selected-conversation': active
     });
 
-    const title = conversation.metadata.title || participantUsers.map(function(user) {
+    const title = conversation.metadata.conversationName || participantUsers.map(function(user) {
       return user.displayName;
     }).join(', ');
 

@@ -49,7 +49,7 @@ export default class ConversationHeader extends Component {
       <div className='conversation-header panel-header'>
         <div className='title edit-title'>
           <input
-            defaultValue={title || activeConversation.metadata.title}
+            defaultValue={title || activeConversation.metadata.conversationName}
             placeholder='Conversation title...'
             onKeyDown={this.handleKeyDown}
             onChange={this.handleChangeTitle}/>
@@ -66,8 +66,8 @@ export default class ConversationHeader extends Component {
     const { activeConversation, disableEdit } = this.props;
     var title = '← Create a new conversation or select a conversation from the list.';
     if (activeConversation) {
-      if (activeConversation.metadata.title) {
-        title = activeConversation.metadata.title;
+      if (activeConversation.metadata.conversationName) {
+        title = activeConversation.metadata.conversationName;
       } else {
         title = activeConversation.participants
         .map(user => user.displayName)
