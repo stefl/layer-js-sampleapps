@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 
 import {
   View,
@@ -7,11 +7,6 @@ import {
 } from 'react-native';
 
 export default class Avatar extends Component {
-
-  // static propTypes = {
-  //   user: PropTypes.object,
-  //   users: PropTypes.array
-  // }
 
   render() {
     const { user, users } = this.props;

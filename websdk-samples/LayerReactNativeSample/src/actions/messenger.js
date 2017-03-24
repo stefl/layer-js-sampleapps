@@ -37,10 +37,6 @@ export function clientReady() {
   };
 }
 
-// export function selectConversation(conversationId) {
-//   return push(`/conversations/${toUUID(conversationId)}`);
-// }
-
 export function selectConversation(conversationId) {
   if (conversationId) conversationId = toUUID(conversationId);
 
@@ -84,10 +80,6 @@ export function fetchUsersSuccess(users) {
     }
   };
 }
-
-// export function goHome() {
-//   return push('/');
-// }
 
 export function showParticipants() {
   return {
@@ -166,7 +158,6 @@ export function markMessageRead(messageId) {
     }
   }
 }
-
 
 export function showAnnouncements() {
   return {

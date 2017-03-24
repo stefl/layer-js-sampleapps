@@ -17,7 +17,6 @@ export default class QuoteMessagePart extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     paddingVertical: 12,
     paddingHorizontal: 12,
     borderRadius: 15,

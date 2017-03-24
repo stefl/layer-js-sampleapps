@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -18,15 +18,12 @@ export default class MessageList extends Component {
 
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-    console.log('messages', this.props.messages);
-
     this.state = {
       dataSource: ds.cloneWithRows(this.props.messages)
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps messages', nextProps.messages);
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(nextProps.messages),
     })

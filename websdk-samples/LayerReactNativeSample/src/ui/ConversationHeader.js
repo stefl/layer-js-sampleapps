@@ -9,8 +9,6 @@ import {
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const ENTER = 13;
-
 export default class ConversationHeader extends Component {
 
   /**
