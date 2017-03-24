@@ -146,8 +146,8 @@ sampleControllers.controller('chatCtrl', function ($scope, $location) {
    */
   $scope.getConversationTitle = function(conversationObject) {
     if (conversationObject) {
-      // Metadata.title is the preferred title
-      if (conversationObject.metadata.title) return conversationObject.metadata.title;
+      // metadata.conversationName is the preferred title
+      if (conversationObject.metadata.conversationName) return conversationObject.metadata.conversationName;
 
       // A join of all participants names is the backup title.
       return conversationObject.participants

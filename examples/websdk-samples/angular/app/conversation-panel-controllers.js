@@ -59,7 +59,7 @@ controllers.controller('conversationCtrl', function($scope) {
 
 
         // Listens for all changes to this Conversation's properties;
-        // Primarily for rendering changes to metadata.title
+        // Primarily for rendering changes to metadata.conversationName
         if (conversation) {
           conversation.on('conversations:change', function() {
             $scope.chatCtrlState.currentConversation = conversation.toObject();
@@ -91,7 +91,7 @@ controllers.controller('conversationCtrl', function($scope) {
     var conversationInstance = $scope.appCtrlState.client.getConversation($scope.chatCtrlState.currentConversation.id);
     if (conversationInstance) {
       conversationInstance.setMetadataProperties({
-        title: $scope.chatCtrlState.currentConversation.metadata.title
+        conversationName: $scope.chatCtrlState.currentConversation.metadata.conversationName
       });
     }
     $scope.editingTitle = false;
