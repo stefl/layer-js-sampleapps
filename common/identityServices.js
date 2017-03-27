@@ -10,6 +10,8 @@
   request.open('GET', 'common/config.json', false);
   request.send();
 
+  if (!config[0].app_id) throw new Error("No app_id key found in LayerConfiguration.json");
+
   /**
    * layerSample global utility
    *
