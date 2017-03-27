@@ -4,6 +4,7 @@ This repository contains sample chat applications that demonstrate different way
 
 ## Identity Server
 
+<<<<<<< HEAD
 To run this sample, you need to setup an Identity Service.  This by deploying a service to Heroku's free tier of services.
 
 To deploy this service:
@@ -15,6 +16,9 @@ To deploy this service:
 
 This will startup the deploy process, and end with a zip file being downloaded which contains this repo, preconfigured
 for this app and your Identity Service.
+=======
+To run this sample, you need to setup an Identity Service.  This can be done via a Deploy to Heroku button.
+>>>>>>> Quick start Changes
 
 This Identity Service provides you a sample server for purposes of testing and demoing Layer's products.
 
@@ -189,10 +193,3 @@ var ConversationView = LayerUIWidgets.Conversation;
 ```
 
 After initializing the UI Framework, the adatpor generates the Backbone views so that they can be instantiated and used.
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
->>>>>>> Sample app built on new Identity Services
-=======
->>>>>>> Folder restructure for Instastart demo
