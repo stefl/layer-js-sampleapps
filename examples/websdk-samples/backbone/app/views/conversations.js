@@ -10,7 +10,6 @@ module.exports = Backbone.View.extend({
   },
   render: function() {
     if (!this.conversations) return;
-    console.log('render: ' + this.conversations.length + ' Conversations');
 
     this.$el.empty();
     this.conversations.forEach(function(conversation) {

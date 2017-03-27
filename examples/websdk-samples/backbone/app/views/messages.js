@@ -16,7 +16,6 @@ module.exports = Backbone.View.extend({
     if (!this.messages) return;
 
     var messages = this.messages.concat().reverse();
-    console.log('render: ' + messages.length + ' Messages');
 
     this.$el.show();
     this.$el.empty();

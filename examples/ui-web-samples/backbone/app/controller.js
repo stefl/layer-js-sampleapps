@@ -39,21 +39,21 @@ module.exports = function(client) {
     // If we are in the foreground, and the message is in the currently selected Conversation,
     // prevent the toast notification.
     onMessageNotification: function(evt) {
-      if (evt.detail.message.conversationId === conversationView.conversationId && !evt.detail.isBackground) {
+      if (evt.detail.item.conversationId === conversationView.conversationId && !evt.detail.isBackground) {
         evt.preventDefault();
       }
     },
 
     // On clicking on the notification, open the Conversation
     onNotificationClick: function(evt) {
-      var message = evt.detail.message;
+      var message = evt.detail.item;
       location.hash = message.conversationId.replace(/^layer:\/\/\//, '');
     }
   });
 
   var conversationsListView = new ConversationsListView(client, {
     onConversationSelected: function(evt) {
-      location.hash = evt.detail.conversation.id.replace(/^layer:\/\/\//, '');
+      location.hash = evt.detail.item.id.replace(/^layer:\/\/\//, '');
     }
   });
 

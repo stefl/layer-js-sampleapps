@@ -120,7 +120,7 @@ sampleControllers.controller('chatCtrl', function ($scope, $location) {
    * The user selects a Conversation in the <layer-conversations-list>
    */
   $scope.selectConversation = function(evt) {
-    $scope.updateSelectedConversation(evt.detail.conversation);
+    $scope.updateSelectedConversation(evt.detail.item);
     $scope.$apply();
   };
 
@@ -151,14 +151,14 @@ sampleControllers.controller('chatCtrl', function ($scope, $location) {
 
   $scope.onMessageNotification = function(evt) {
     if ((!$scope.chatCtrlState.currentConversation ||
-        evt.detail.message.conversationId === $scope.chatCtrlState.currentConversation.id) &&
+        evt.detail.item.conversationId === $scope.chatCtrlState.currentConversation.id) &&
         !evt.detail.isBackground) {
       evt.preventDefault();
     }
   };
 
   $scope.onNotificationClick = function(evt) {
-    var message = evt.detail.message;
+    var message = evt.detail.item;
     $scope.chatCtrlState.currentConversation = message.getConversation().toObject();
     $location.path(message.conversationId.replace(/^layer:\/\/\//, ''));
     $scope.$apply();

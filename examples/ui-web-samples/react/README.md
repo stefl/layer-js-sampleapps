@@ -1,6 +1,6 @@
 # React chat UI example using Layer SDK
 
-This is a simple example on how one would use the Layer Web SDK with the [ReactJS](https://reactjs.org) framework.
+This is a simple example on how one would use the Layer Web SDK and Layer UI for Web with the [ReactJS](https://reactjs.org) framework.
 
 ### Installation
 
