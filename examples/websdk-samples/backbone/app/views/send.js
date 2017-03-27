@@ -23,7 +23,6 @@ module.exports = Backbone.View.extend({
     this.trigger('typing:started');
 
     if (e.keyCode !== 13 || !text) return true;
-    console.log('send: ' + text);
 
     // Example of using custom mime type
     if (text.indexOf('> ') === 0) {

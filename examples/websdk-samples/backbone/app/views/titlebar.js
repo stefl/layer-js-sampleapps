@@ -12,7 +12,6 @@ module.exports = Backbone.View.extend({
     this.render();
   },
   render: function() {
-    console.log('render: Titlebar');
     var html = '';
 
     if (this.emptyState) {

@@ -23,7 +23,6 @@ client.once('challenge', e => {
   window.layerSample.getIdentityToken(e.nonce, e.callback);
 });
 
-console.log('listening for onLogin');
 window.layerSample.onLogin(() => {
   /**
    * Start authentication
