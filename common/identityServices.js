@@ -7,7 +7,7 @@
   request.onload = function() {
     config = JSON.parse(this.responseText);
   };
-  request.open('GET', 'common/config.json', false);
+  request.open('GET', 'common/LayerConfiguration.json', false);
   request.send();
 
   if (!config[0].app_id) throw new Error("No app_id key found in LayerConfiguration.json");
@@ -27,6 +27,33 @@
     email: null,
     password: null,
     validateSetup: function(client) {
+      var conversationQuery = client.createQuery({
+        paginationWindow: 1,
+        model: layer.Query.Conversation
+      });
+      conversationQuery.on('change:data', function() {
+        if (conversationQuery.data.length === 0) {
+          var identityQuery = client.createQuery({
+            paginationWindow: 5,
+            model: layer.Query.Identity
+          });
+          identityQuery.on('change:data', function() {
+            if (identityQuery.data.length === 0) {
+              alert("There are no other users to talk to; please use your Identity Server to register new users");
+            } else {
+              var conversation = client.createConversation({
+                participants: identityQuery.data.map(function(user) {
+                  return user.id;
+                }),
+                metadata: {
+                  conversationName: "Sample Conversation"
+                }
+              });
+              conversation.createMessage("Welcome to the new Conversation").send();
+            }
+          });
+        }
+      });
     },
     getIdentityToken: function(nonce, callback) {
       layer.xhr({
