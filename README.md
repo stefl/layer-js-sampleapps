@@ -4,7 +4,17 @@ This repository contains sample chat applications that demonstrate different way
 
 ## Identity Server
 
-To run this sample, you need to setup an Identity Service.  This can be done via a Deploy to Heroku button.
+To run this sample, you need to setup an Identity Service.  This by deploying a service to Heroku's free tier of services.
+
+To deploy this service:
+
+1. Login to the [Developer Dashboard](https://dashboard.layer.com)
+2. Navigate to your App
+3. Select `Tools` in the Table of contents
+4. Click the `Start` button in the Sample Apps section
+
+This will startup the deploy process, and end with a zip file being downloaded which contains this repo, preconfigured
+for this app and your Identity Service.
 
 This Identity Service provides you a sample server for purposes of testing and demoing Layer's products.
 
