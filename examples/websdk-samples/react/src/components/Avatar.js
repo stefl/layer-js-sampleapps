@@ -21,7 +21,7 @@ export default class Avatar extends Component {
     });
 
     return <div className={styles}>
-      {usersToRender.length === 1 ? <div className={'layer-presence layer-presence-' + usersToRender[0].presence.status.toLowerCase()} /> : <div className='layer-presence-hidden' />}
+      {usersToRender.length === 1 ? <div className={'layer-presence layer-presence-' + usersToRender[0].status.toLowerCase()} /> : <div className='layer-presence-hidden' />}
       {usersToRender.filter(item => item.id).map(this.renderUserItem)}
     </div>;
   }

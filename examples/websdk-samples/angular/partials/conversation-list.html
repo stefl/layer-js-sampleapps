@@ -5,7 +5,7 @@
     ng-repeat="conversation in query.data track by conversation.id">
   <div class="avatar-image {{conversation.participants.length > 2 ? 'cluster' : ''}}">
     <span ng-repeat="identity in conversation.participants | filter:filterParticipants">
-        <div class="{{conversation.participants.length === 2 ?  'layer-presence layer-presence-' + identity.presence.status.toLowerCase() : 'layer-presence-hidden'}}"></div>
+        <div class="{{conversation.participants.length === 2 ?  'layer-presence layer-presence-' + identity.status.toLowerCase() : 'layer-presence-hidden'}}"></div>
         <img src="{{identity.avatarUrl}}" />
     </span>
   </div>

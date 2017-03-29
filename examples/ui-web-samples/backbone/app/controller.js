@@ -35,7 +35,7 @@ module.exports = function(client) {
   var presenceView = new PresenceView(client, {
     item: client.user,
     onPresenceClick: function(evt) {
-      if (client.user.presence.status === layer.Identity.STATUS.BUSY) {
+      if (client.user.status === layer.Identity.STATUS.BUSY) {
         client.user.setStatus(layer.Identity.STATUS.AVAILABLE);
       } else {
         client.user.setStatus(layer.Identity.STATUS.BUSY);

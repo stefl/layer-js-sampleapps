@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 [{
   "name":"",
-  "app_id":"",
-  "identity_provider_url":""
+  "app_id":"layer:///apps/staging/f34bdf52-fd26-11e6-9f75-336a5297de53",
+  "identity_provider_url":"https://layer-quickstart-michael.herokuapp.com"
 }]
-=======
-[{"name":"Layer's App","app_id":"layer:///apps/staging/b38b1fe2-4302-11e6-8f67-43ae000000b4","identity_provider_url":"https://instastart-nil-stage1.herokuapp.com/"}]
->>>>>>> Folder restructure for Instastart demo

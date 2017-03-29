@@ -54,7 +54,7 @@ div.avatar-image {
 div.avatar-image span {
   border-radius: 50%;
 }
-div.avatar-image.cluster, .conversation-item .avatar-image {
+div.avatar-image.cluster, .avatar-image {
   border-radius: 0;
   background: none;
   width: 40px;
@@ -77,7 +77,6 @@ div.avatar-image.cluster span:last-child {
 }
 
 .avatar-image {
-  margin-right: 10px;
   -webkit-align-items: flex-center;
   align-items: center;
   display: -webkit-flex;
@@ -528,10 +527,6 @@ div.avatar-image.cluster span:last-child {
   font-weight: bold;
 }
 
-.participant-item .avatar-image {
-  width: 34px;
-}
-
 .participant-item label, .participant-item input {
   cursor: pointer;
 }
@@ -587,8 +582,12 @@ div.avatar-image.cluster span:last-child {
   width: 16px;
   height: 16px;
   border-radius: 30px;
+}
+
+.panel-header .layer-presence {
   margin-right: 10px;
 }
+
 .layer-presence-away {
   background-color: yellow;
 }
@@ -607,8 +606,8 @@ div.avatar-image.cluster span:last-child {
 
 .avatar-image .layer-presence {
   position: absolute;
-  top: 0px;
-  left: 0px;
+  bottom: 0px;
+  right: 0px;
   border: solid 2px white;
 }
 

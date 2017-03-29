@@ -37,7 +37,7 @@ export default class ConversationListHeader extends Component {
     if (unreadAnnouncements) announcementClasses.push('unread-announcements');
     return (
       <div className='panel-header conversations-header'>
-        <div className={'layer-presence layer-presence-' + owner.presence.status.toLowerCase()} onClick={this.togglePresence}></div>
+        <div className={'layer-presence layer-presence-' + owner.status.toLowerCase()} onClick={this.togglePresence}></div>
         <div className='title'>{owner.displayName}'s Conversations</div>
         <a className={announcementClasses.join(' ')} onClick={this.showAnnouncements}>
           <i className="icon fa fa-bullhorn"></i>

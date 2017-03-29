@@ -89,7 +89,7 @@ sampleControllers.controller('chatCtrl', function ($scope, $location) {
    */
   $scope.togglePresence = function togglePresence() {
     var user = $scope.appCtrlState.client.user;
-    if (user.presence.status === layer.Identity.STATUS.AVAILABLE) {
+    if (user.status === layer.Identity.STATUS.AVAILABLE) {
       user.setStatus(layer.Identity.STATUS.BUSY);
     } else {
       user.setStatus(layer.Identity.STATUS.AVAILABLE);

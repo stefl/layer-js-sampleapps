@@ -96,7 +96,7 @@ function handleAction(layerClient, typingPublisher, state, action, next) {
       return;
 
     case TOGGLE_PRESENCE:
-      if (layerClient.user.presence.status === layer.Identity.STATUS.BUSY) {
+      if (layerClient.user.status === layer.Identity.STATUS.BUSY) {
         layerClient.user.setStatus(layer.Identity.STATUS.AVAILABLE);
       } else {
         layerClient.user.setStatus(layer.Identity.STATUS.BUSY);
@@ -114,10 +114,10 @@ const layerMiddleware = layerClient => store => {
   layerClient.on('ready', () => {
     store.dispatch(ownerSet(layerClient.user.toObject()));
     store.dispatch(clientReady());
-  });
 
-  layerClient.user.on('identities:change', function(evt) {
-    store.dispatch(ownerSet(layerClient.user.toObject()));
+    layerClient.user.on('identities:change', function(evt) {
+      store.dispatch(ownerSet(layerClient.user.toObject()));
+    });
   });
 
   return next => action => {

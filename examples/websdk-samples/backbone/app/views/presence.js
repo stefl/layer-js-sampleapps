@@ -15,7 +15,7 @@ module.exports = Backbone.View.extend({
       this.$el.removeClass('layer-presence-away');
       this.$el.removeClass('layer-presence-invisible');
       this.$el.removeClass('layer-presence-offline');
-      this.$el.addClass('layer-presence-' + this.model.presence.status.toLowerCase());
+      this.$el.addClass('layer-presence-' + this.model.status.toLowerCase());
     }
   },
   events: {
@@ -23,7 +23,7 @@ module.exports = Backbone.View.extend({
   },
   togglePresence: function(e) {
     if (this.model && this.model.sessionOwner) {
-      if (this.model.presence.status === layer.Identity.STATUS.BUSY) {
+      if (this.model.status === layer.Identity.STATUS.BUSY) {
         this.model.setStatus(layer.Identity.STATUS.AVAILABLE);
       } else {
         this.model.setStatus(layer.Identity.STATUS.BUSY);
