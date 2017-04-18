@@ -22,6 +22,18 @@ controllers.controller('conversationListCtrl', function ($scope, $rootScope) {
     paginationWindow: 500
   });
 
+  $scope.appCtrlState.client.on('identities:change', function(evt) {
+      // Stupid hack; bug has been filed to fix this in websdk and layer-react
+      Object.keys($scope.appCtrlState.client._models.queries).forEach(queryId => {
+        var query = $scope.appCtrlState.client.getQuery(queryId);
+        if (query.model === layer.Query.Conversation) {
+          query.data.forEach(conversation => $scope.appCtrlState.client.getConversation(conversation.id)._clearObject());
+          query.data = query.data.map(conversation => $scope.appCtrlState.client.getConversation(conversation.id).toObject());
+          query.trigger('change');
+        }
+      });
+    });
+
   /**
    * Any time the query data changes, rerender.  Data changes when:
    *

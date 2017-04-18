@@ -54,6 +54,15 @@ div.avatar-image {
 div.avatar-image span {
   border-radius: 50%;
 }
+
+div.avatar-image span.no-avatar {
+  border: solid 1px rgba(0, 0, 0, 0.1);
+  width: 38px;
+  height: 38px;
+  text-align: center;
+  line-height: 38px;
+}
+
 div.avatar-image.cluster, .avatar-image {
   border-radius: 0;
   background: none;
@@ -84,6 +93,7 @@ div.avatar-image.cluster span:last-child {
   -webkit-flex-direction: row;
   flex-direction: row;
 }
+
 
 /* Conversation List */
 .conversation-list {

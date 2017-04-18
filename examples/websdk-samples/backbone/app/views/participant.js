@@ -9,9 +9,14 @@ module.exports = Backbone.View.extend({
   render: function() {
     var el = this.$el[0];
     var participant = this.model;
-
+    var avatar;
+    if (participant.avatarUrl) {
+        avatar = '<span><img src="' + participant.avatarUrl + '" /></span>';
+      } else {
+        avatar = '<span class="no-avatar">' + participant.displayName.substring(0, 2) + '</span>';
+      }
     this.$el.append(
-      '<div class="avatar-image"><img src="' + participant.avatarUrl + '" /></div>' +
+      '<div class="avatar-image">' + avatar + '</div>' +
       '<label for="participant-checkbox-' + participant.id + '">' + participant.displayName + '</label>' +
       '<input value="' + participant.userId + '" ' +
           'id="participant-checkbox-' + participant.id + '" ' +

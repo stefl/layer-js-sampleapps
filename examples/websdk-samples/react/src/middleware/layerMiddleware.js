@@ -118,6 +118,18 @@ const layerMiddleware = layerClient => store => {
     layerClient.user.on('identities:change', function(evt) {
       store.dispatch(ownerSet(layerClient.user.toObject()));
     });
+
+    layerClient.on('identities:change', function(evt) {
+      // Stupid hack; bug has been filed to fix this in websdk and layer-react
+      Object.keys(layerClient._models.queries).forEach(queryId => {
+        var query = layerClient.getQuery(queryId);
+        if (query.model === layer.Query.Conversation) {
+          query.data.forEach(conversation => layerClient.getConversation(conversation.id)._clearObject());
+          query.data = query.data.map(conversation => layerClient.getConversation(conversation.id).toObject());
+          query.trigger('change');
+        }
+      });
+    });
   });
 
   return next => action => {

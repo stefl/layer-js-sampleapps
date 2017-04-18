@@ -32,7 +32,11 @@ module.exports = Backbone.View.extend({
     el.setAttribute('href', '#conversations/' + uuid);
 
     var avatars = interestingParticipants.map(function(user) {
-      return '<span><img src="' + user.avatarUrl + '" /></span>';
+      if (user.avatarUrl) {
+        return '<span><img src="' + user.avatarUrl + '" /></span>';
+      } else {
+        return '<span class="no-avatar">' + user.displayName.substring(0, 2) + '</span>';
+      }
     });
     var cluster = avatars.length > 1 ? 'cluster' : '';
 

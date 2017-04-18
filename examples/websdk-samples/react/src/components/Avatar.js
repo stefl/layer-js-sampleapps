@@ -9,7 +9,7 @@ export default class Avatar extends Component {
   }
 
   renderUserItem = (user) => {
-    return <span key={'avatar-' + user.id}><img src={user.avatarUrl} /></span>;
+    return user.avatarUrl ?  <span key={'avatar-' + user.id}><img src={user.avatarUrl} /></span> : <span className='no-avatar'>{user.displayName.substring(0,2)}</span>;
   }
 
   render() {
@@ -21,7 +21,7 @@ export default class Avatar extends Component {
     });
 
     return <div className={styles}>
-      {usersToRender.length === 1 ? <div className={'layer-presence layer-presence-' + usersToRender[0].status.toLowerCase()} /> : <div className='layer-presence-hidden' />}
+      {usersToRender.length === 1 ? <div className={'layer-presence layer-presence-' + usersToRender[0].status.toLowerCase() } /> : <div className='layer-presence-hidden' />}
       {usersToRender.filter(item => item.id).map(this.renderUserItem)}
     </div>;
   }
