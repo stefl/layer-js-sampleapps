@@ -78,7 +78,7 @@
           var node = document.getElementById('identity');
           if (node) node.parentNode.removeChild(node);
         } else {
-          console.error('challenge error: ', res.data);
+          alert('Login failed; please check your user id and password');
         }
       });
     },
