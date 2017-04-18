@@ -4,7 +4,6 @@ This repository contains sample chat applications that demonstrate different way
 
 ## Identity Server
 
-<<<<<<< HEAD
 To run this sample, you need to setup an Identity Service.  This by deploying a service to Heroku's free tier of services.
 
 To deploy this service:
@@ -16,9 +15,8 @@ To deploy this service:
 
 This will startup the deploy process, and end with a zip file being downloaded which contains this repo, preconfigured
 for this app and your Identity Service.
-=======
+
 To run this sample, you need to setup an Identity Service.  This can be done via a Deploy to Heroku button.
->>>>>>> Quick start Changes
 
 This Identity Service provides you a sample server for purposes of testing and demoing Layer's products.
 
@@ -52,8 +50,8 @@ This JSON file contains an array of at least one:
 
 The main demo shows how to build an application using
 
-* [Layer WebSDK](github.com/layerhq/layer-websdk)
-* [Layer UI for Web](github.com/layerhq/layer-ui-web)
+* [Layer WebSDK](https://github.com/layerhq/layer-websdk)
+* [Layer UI for Web](https://github.com/layerhq/layer-ui-web)
 * [AngularJS](https://angularjs.org/)
 
 ### Install
@@ -102,21 +100,21 @@ These sample apps are built using the [Layer WebSDK](https://docs.layer.com/sdk/
 The [React App](./examples/websdk-samples/react) uses:
 
 * Redux to implement a flux architecture
-* [layer-react](github.com/layerhq/layer-react) to add Layer Query data to the state
-* NPM to include the [Layer WebSDK]((github.com/layerhq/layer-websdk)
+* [layer-react](https://github.com/layerhq/layer-react) to add Layer Query data to the state
+* NPM to include the [Layer WebSDK](https://github.com/layerhq/layer-websdk)
 
 ### Angular 1.x
 
 The [Angular App](./examples/websdk-samples/angular) uses:
 
-* CDN to include the [Layer WebSDK]((github.com/layerhq/layer-websdk)
+* CDN to include the [Layer WebSDK](https://github.com/layerhq/layer-websdk)
 * Standard Angular 1.x templates and controllers to work with Layer Query data
 
 ### Backbone
 
 The [Backbone App](./examples/websdk-samples/backbone) uses:
 
-* CDN to include the [Layer WebSDK]((github.com/layerhq/layer-websdk)
+* CDN to include the [Layer WebSDK](https://github.com/layerhq/layer-websdk)
 * Standard Backbone Views to work with Layer Query data
 
 
